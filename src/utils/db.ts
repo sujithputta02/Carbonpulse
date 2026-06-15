@@ -1,13 +1,15 @@
 import fs from "fs";
 import path from "path";
-import { UserAccount, UserProfile } from "@/types/user";
-import { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "@/types/activity";
-export type { UserAccount, UserProfile } from "@/types/user";
-export type { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "@/types/activity";
-import { DEFAULT_EMISSION_FACTORS } from "@/lib/carbon/emissionFactors";
+import { UserAccount, UserProfile } from "../types/user";
+import { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "../types/activity";
+export type { UserAccount, UserProfile } from "../types/user";
+export type { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "../types/activity";
+import { DEFAULT_EMISSION_FACTORS } from "../lib/carbon/emissionFactors";
 
-// Define the absolute path to the db.json file
-const DB_DIR = path.join(process.cwd(), "data");
+// Determine absolute paths dynamically. In production/serverless environments like Vercel,
+// the repository directory is read-only. We fall back to using '/tmp/data' which is writable.
+const isProduction = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
+const DB_DIR = isProduction ? "/tmp/data" : path.join(process.cwd(), "data");
 const DB_FILE = path.join(DB_DIR, "db.json");
 
 // In-memory cache for the parsed database structure to optimize CPU and memory allocation
@@ -25,14 +27,35 @@ export function readDb(): DatabaseSchema {
     }
     
     if (!fs.existsSync(DB_FILE)) {
-      const initialDb: DatabaseSchema = {
-        users: [],
-        userProfiles: [],
-        activityLogs: [],
-        goals: [],
-        emissionFactors: DEFAULT_EMISSION_FACTORS,
-        auditLogs: [],
-      };
+      // Check if a pre-existing workspace db.json exists, to copy over default/seed data.
+      const workspaceDbFile = path.join(process.cwd(), "data", "db.json");
+      let initialDb: DatabaseSchema;
+      
+      if (fs.existsSync(workspaceDbFile)) {
+        try {
+          const rawData = fs.readFileSync(workspaceDbFile, "utf8");
+          initialDb = JSON.parse(rawData) as DatabaseSchema;
+        } catch {
+          initialDb = {
+            users: [],
+            userProfiles: [],
+            activityLogs: [],
+            goals: [],
+            emissionFactors: DEFAULT_EMISSION_FACTORS,
+            auditLogs: [],
+          };
+        }
+      } else {
+        initialDb = {
+          users: [],
+          userProfiles: [],
+          activityLogs: [],
+          goals: [],
+          emissionFactors: DEFAULT_EMISSION_FACTORS,
+          auditLogs: [],
+        };
+      }
+      
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), "utf8");
       cachedDb = initialDb;
       return initialDb;
