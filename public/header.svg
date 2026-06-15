@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 260" width="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+      
+      .bg-rect {
+        fill: #06090e;
+      }
+      .grid-path {
+        fill: none;
+        stroke: #161b22;
+        stroke-width: 1;
+      }
+      .horizon-grid {
+        fill: none;
+        stroke: #00f0ff;
+        stroke-width: 1.5;
+        stroke-opacity: 0.25;
+      }
+      .glow-border {
+        fill: none;
+        stroke: url(#border-gradient);
+        stroke-width: 3;
+        filter: url(#glow);
+        animation: borderPulse 4s infinite ease-in-out;
+      }
+      .terminal-header {
+        fill: #0d1117;
+      }
+      .title-text {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 32px;
+        fill: #39ff14;
+        filter: url(#glow);
+        text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+        animation: textFlicker 6s infinite;
+      }
+      .subtitle-text {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        fill: #00f0ff;
+        letter-spacing: 1px;
+        filter: url(#glow-blue);
+      }
+      .terminal-info {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #8b9bb4;
+      }
+      .status-active {
+        fill: #39ff14;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        filter: url(#glow);
+        animation: activePulse 2s infinite ease-in-out;
+      }
+      .scanline {
+        fill: none;
+        stroke: #000000;
+        stroke-width: 1;
+        stroke-opacity: 0.15;
+        animation: scanlineScroll 12s linear infinite;
+      }
+      .window-btn-close { fill: #ff5f56; }
+      .window-btn-min { fill: #ffbd2e; }
+      .window-btn-max { fill: #27c93f; }
+      
+      .cursor-blink {
+        animation: cursorBlink 1s infinite;
+      }
+
+      /* Animations */
+      @keyframes cursorBlink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+      }
+      
+      @keyframes activePulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; filter: drop-shadow(0 0 4px #39ff14); }
+      }
+
+      @keyframes borderPulse {
+        0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 2px #00f0ff); }
+        50% { opacity: 1; filter: drop-shadow(0 0 8px #39ff14); }
+      }
+
+      @keyframes textFlicker {
+        0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 0.99; filter: drop-shadow(0 0 6px #39ff14); }
+        20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.92; filter: drop-shadow(0 0 2px #39ff14); }
+      }
+    </style>
+    
+    <!-- Glow Filters -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Linear Gradient for Border -->
+    <linearGradient id="border-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#39ff14"/>
+      <stop offset="50%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#ff007f"/>
+    </linearGradient>
+    
+    <!-- Grid Pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" class="grid-path"/>
+    </pattern>
+  </defs>
+
+  <!-- CRT Window Base -->
+  <rect width="850" height="260" rx="10" class="bg-rect"/>
+  <rect width="850" height="260" rx="10" fill="url(#grid)"/>
+
+  <!-- Horizon Perspective Grid (Cyberpunk Synthwave feel) -->
+  <path d="M 0 170 L 850 170 M 0 180 L 850 180 M 0 195 L 850 195 M 0 215 L 850 215 M 0 240 L 850 240" class="horizon-grid"/>
+  <path d="M 85 170 L 0 260 M 212 170 L 100 260 M 340 170 L 280 260 M 425 170 L 425 260 M 510 170 L 570 260 M 637 170 L 750 260 M 765 170 L 850 260" class="horizon-grid"/>
+
+  <!-- Glowing Outer Frame -->
+  <rect x="5" y="5" width="840" height="250" rx="8" class="glow-border"/>
+
+  <!-- Window Header / Title Bar -->
+  <path d="M 5 5 L 845 5 L 845 35 L 5 35 Z" fill="#0d1117"/>
+  <circle cx="25" cy="20" r="6" class="window-btn-close"/>
+  <circle cx="45" cy="20" r="6" class="window-btn-min"/>
+  <circle cx="65" cy="20" r="6" class="window-btn-max"/>
+  
+  <text x="425" y="24" font-family="'Press Start 2P', monospace" font-size="10" fill="#8b9bb4" text-anchor="middle">> SUJITH@CRT-PORTAL: ~</text>
+
+  <!-- Scanlines (CRT simulation) -->
+  <path d="M 0 10 L 850 10 M 0 20 L 850 20 M 0 30 L 850 30 M 0 40 L 850 40 M 0 50 L 850 50 M 0 60 L 850 60 M 0 70 L 850 70 M 0 80 L 850 80 M 0 90 L 850 90 M 0 100 L 850 100 M 0 110 L 850 110 M 0 120 L 850 120 M 0 130 L 850 130 M 0 140 L 850 140 M 0 150 L 850 150 M 0 160 L 850 160 M 0 170 L 850 170 M 0 180 L 850 180 M 0 190 L 850 190 M 0 200 L 850 200 M 0 210 L 850 210 M 0 220 L 850 220 M 0 230 L 850 230 M 0 240 L 850 240 M 0 250 L 850 250" class="scanline"/>
+
+  <!-- Left Stats Info -->
+  <text x="25" y="75" class="terminal-info">SYS.STATUS: </text>
+  <text x="135" y="75" class="status-active">ONLINE</text>
+  <text x="25" y="95" class="terminal-info">LOC: IN/HYBRID</text>
+  <text x="25" y="115" class="terminal-info">BITRATE: 8-BIT</text>
+
+  <!-- Main Name Title -->
+  <text x="425" y="105" class="title-text" text-anchor="middle">SUJITH PUTTA</text>
+  
+  <!-- Subtitle -->
+  <text x="425" y="145" class="subtitle-text" text-anchor="middle">&gt; FULL-STACK DEVELOPER &amp; AI SPECIALIST &lt;</text>
+
+  <!-- Right Stats Info -->
+  <text x="825" y="75" class="terminal-info" text-anchor="end">LEVEL: 99</text>
+  <text x="825" y="95" class="terminal-info" text-anchor="end">XP: 25.6K</text>
+  <text x="825" y="115" class="terminal-info" text-anchor="end">PORT: 2026</text>
+
+  <!-- Blinking Cursor Prompt Simulation at Bottom -->
+  <rect x="235" y="210" width="380" height="25" fill="#0d1117" rx="4" stroke="#00f0ff" stroke-opacity="0.3"/>
+  <text x="245" y="226" font-family="'Press Start 2P', monospace" font-size="7" fill="#39ff14">&gt; npm run dev --retro_mode<tspan class="cursor-blink">_</tspan></text>
+</svg>
