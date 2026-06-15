@@ -4,21 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { logActivity } from "../actions";
+import { CategoryType } from "@/types/activity";
+
+import PresetLogger, { PresetItem } from "@/features/tracking/components/PresetLogger";
+import ManualLogForm from "@/features/tracking/components/ManualLogForm";
+
 import { 
-  Car, Leaf, Zap, ShoppingBag, ArrowLeft, CheckCircle2, 
-  Info, PlusCircle, AlertCircle, Loader2 
+  Car, Leaf, Zap, ShoppingBag, ArrowLeft, CheckCircle2, AlertCircle 
 } from "lucide-react";
-
-type CategoryType = "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
-
-interface PresetItem {
-  id: string;
-  name: string;
-  actionType: string;
-  amount: number;
-  label: string;
-  description: string;
-}
 
 const PRESETS: Record<CategoryType, PresetItem[]> = {
   TRANSPORT: [
@@ -67,7 +60,6 @@ export default function TrackClient() {
         amount: preset.amount,
       });
       setSuccessMsg(`Successfully logged "${preset.name}"!`);
-      // Auto clear message
       setTimeout(() => setSuccessMsg(null), 3000);
       router.refresh();
     } catch (e) {
@@ -116,15 +108,6 @@ export default function TrackClient() {
     }
   };
 
-  const getAmountUnit = (cat: CategoryType) => {
-    switch (cat) {
-      case "TRANSPORT": return "km traveled";
-      case "FOOD": return "meals";
-      case "ENERGY": return "kWh consumed";
-      case "SHOPPING": return "items bought";
-    }
-  };
-
   return (
     <div className="max-w-4xl mx-auto w-full flex flex-col space-y-8 py-4 text-left">
       <div className="flex items-center space-x-3">
@@ -140,7 +123,7 @@ export default function TrackClient() {
         </div>
       </div>
 
-      {/* Success / Error Toast notices */}
+      {/* Success / Error notices */}
       {successMsg && (
         <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm font-semibold flex items-center space-x-2">
           <CheckCircle2 className="h-5 w-5 shrink-0" />
@@ -164,7 +147,6 @@ export default function TrackClient() {
               key={cat}
               onClick={() => {
                 setActiveTab(cat);
-                // Pre-populate manual select value based on category
                 if (cat === "TRANSPORT") setActionType("PETROL_CAR");
                 else if (cat === "FOOD") setActionType("VEGGIE_MEAL");
                 else if (cat === "ENERGY") setActionType("ELECTRICITY");
@@ -172,7 +154,7 @@ export default function TrackClient() {
                 setSuccessMsg(null);
                 setErrorMsg(null);
               }}
-              className={`pb-3 text-sm font-semibold flex items-center space-x-2 border-b-2 transition-all ${
+              className={`pb-3 text-sm font-semibold flex items-center space-x-2 border-b-2 transition-all cursor-pointer ${
                 active
                   ? "border-emerald-500 text-emerald-400 font-bold"
                   : "border-transparent text-gray-400 hover:text-gray-200"
@@ -186,122 +168,25 @@ export default function TrackClient() {
       </div>
 
       <div className="grid md:grid-cols-5 gap-8">
-        {/* Left Side: Quick Presets (3 cols) */}
-        <div className="md:col-span-3 flex flex-col space-y-4">
-          <h3 className="font-display font-bold text-lg text-white">One-Click Presets</h3>
-          <p className="text-xs text-gray-400">Select standard activities for fast, estimated logging.</p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            {PRESETS[activeTab].map((preset) => (
-              <button
-                key={preset.id}
-                disabled={loading}
-                onClick={() => handleQuickLog(preset)}
-                className="glass-panel glass-panel-hover rounded-2xl p-5 border-white/5 text-left flex flex-col justify-between h-36 relative transition-all active:scale-98 disabled:opacity-55"
-              >
-                <div className="flex justify-between items-start">
-                  <div className="p-2 rounded-xl bg-white/5 border border-white/5 shrink-0">
-                    {getTabIcon(activeTab)}
-                  </div>
-                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-semibold border border-emerald-500/10">
-                    Preset Log
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <h4 className="font-semibold text-white text-xs block">{preset.name}</h4>
-                  <p className="text-[10px] text-gray-400 block mt-0.5">{preset.description}</p>
-                </div>
-              </button>
-            ))}
-          </div>
+        <div className="md:col-span-3">
+          <PresetLogger
+            activeTab={activeTab}
+            presets={PRESETS[activeTab]}
+            handleQuickLog={handleQuickLog}
+            loading={loading}
+          />
         </div>
 
-        {/* Right Side: Manual Log Form (2 cols) */}
-        <div className="md:col-span-2 glass-panel rounded-3xl p-6 sm:p-8 border-white/5 flex flex-col space-y-6 self-start">
-          <h3 className="font-display font-bold text-lg text-white">Custom Manual Entry</h3>
-          
-          <form onSubmit={handleManualSubmit} className="flex flex-col space-y-4">
-            <div className="space-y-1">
-              <label htmlFor="action-type-select" className="text-xs text-gray-400 block font-medium">Activity Type</label>
-              <select
-                id="action-type-select"
-                value={actionType}
-                onChange={(e) => setActionType(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors font-semibold"
-              >
-                {activeTab === "TRANSPORT" && (
-                  <>
-                    <option value="PETROL_CAR">Petrol Car Drive</option>
-                    <option value="DIESEL_CAR">Diesel Car Drive</option>
-                    <option value="EV">Electric Vehicle Drive</option>
-                    <option value="BUS">Bus Travel</option>
-                    <option value="TRAIN">Train Journey</option>
-                    <option value="FLIGHT_SHORT">Short Flight (&lt;1000km)</option>
-                    <option value="FLIGHT_LONG">Long Flight (&gt;1000km)</option>
-                  </>
-                )}
-                {activeTab === "FOOD" && (
-                  <>
-                    <option value="MEAT_MEAL">Standard Meat Meal</option>
-                    <option value="LOW_MEAT_MEAL">Poultry / Low Meat Meal</option>
-                    <option value="VEGGIE_MEAL">Vegetarian Meal</option>
-                    <option value="VEGAN_MEAL">Vegan Meal</option>
-                  </>
-                )}
-                {activeTab === "ENERGY" && (
-                  <>
-                    <option value="ELECTRICITY">Electricity Draw (kWh)</option>
-                    <option value="NATURAL_GAS">Natural Gas (kWh)</option>
-                  </>
-                )}
-                {activeTab === "SHOPPING" && (
-                  <>
-                    <option value="CLOTHING">Clothing Purchase</option>
-                    <option value="ELECTRONICS">Electronic Device</option>
-                    <option value="MISC">General Consumables</option>
-                  </>
-                )}
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label htmlFor="amount-input" className="text-xs text-gray-400 block font-medium">Amount ({getAmountUnit(activeTab)})</label>
-              <input
-                id="amount-input"
-                type="number"
-                min="0.1"
-                step="any"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors font-semibold"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center justify-center px-4 py-3 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-[#090d16] font-display hover:scale-103 shadow-lg shadow-emerald-500/10 transition-all disabled:opacity-55 mt-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add to Logs
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-start space-x-2 text-[10px] text-gray-400 leading-normal">
-            <Info className="h-3.5 w-3.5 text-cyan-400 shrink-0 mt-0.5" />
-            <p>
-              Emissions are calculated immediately based on local indices. Values show in the history view right away.
-            </p>
-          </div>
+        <div className="md:col-span-2">
+          <ManualLogForm
+            activeTab={activeTab}
+            actionType={actionType}
+            setActionType={setActionType}
+            amount={amount}
+            setAmount={setAmount}
+            handleManualSubmit={handleManualSubmit}
+            loading={loading}
+          />
         </div>
       </div>
     </div>

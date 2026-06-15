@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { calculateBaseline, calculateActivityCO2e, BaselineInput } from "../utils/calculator";
-import { EmissionFactor } from "../utils/db";
+import { calculateBaseline, calculateActivityCO2e, BaselineInput } from "../lib/carbon/calculateFootprint";
+import { EmissionFactor } from "../types/activity";
 
 const mockFactors: EmissionFactor[] = [
   { id: "1", category: "TRANSPORT", key: "CAR_PETROL", value: 0.27, unit: "kg CO2e / km", updatedAt: "" },

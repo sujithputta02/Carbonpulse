@@ -1,4 +1,4 @@
-import { EmissionFactor } from "./db";
+import { EmissionFactor, CategoryType } from "@/types/activity";
 
 // Helper to look up a factor value by its unique key
 export function getFactorValue(factors: EmissionFactor[], key: string, fallback: number): number {
@@ -75,7 +75,7 @@ export function calculateBaseline(input: BaselineInput, factors: EmissionFactor[
  * Calculates emissions for a single daily log action.
  */
 export function calculateActivityCO2e(
-  category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING",
+  category: CategoryType,
   actionType: string,
   amount: number,
   factors: EmissionFactor[]
@@ -84,8 +84,6 @@ export function calculateActivityCO2e(
   
   switch (category) {
     case "TRANSPORT": {
-      // actionType could be "PETROL_CAR", "DIESEL_CAR", "EV", "BUS", "TRAIN", "FLIGHT_SHORT", "FLIGHT_LONG"
-      // amount is km traveled
       let factorKey = "CAR_PETROL";
       if (actionType === "DIESEL_CAR") factorKey = "CAR_DIESEL";
       else if (actionType === "EV") factorKey = "EV";
@@ -99,8 +97,6 @@ export function calculateActivityCO2e(
       break;
     }
     case "FOOD": {
-      // actionType could be "MEAT_MEAL", "VEGGIE_MEAL", "VEGAN_MEAL"
-      // amount is count of meals. A meal is estimated to be roughly 1/3 of daily intake emissions
       let factorKey = "DIET_HIGH_MEAT";
       if (actionType === "VEGGIE_MEAL") factorKey = "DIET_VEGETARIAN";
       else if (actionType === "VEGAN_MEAL") factorKey = "DIET_VEGAN";
@@ -112,8 +108,6 @@ export function calculateActivityCO2e(
       break;
     }
     case "ENERGY": {
-      // actionType could be "ELECTRICITY", "NATURAL_GAS"
-      // amount is kWh
       let factorKey = "ELECTRICITY";
       if (actionType === "NATURAL_GAS") factorKey = "NATURAL_GAS";
       
@@ -122,10 +116,6 @@ export function calculateActivityCO2e(
       break;
     }
     case "SHOPPING": {
-      // actionType could be "CLOTHING", "ELECTRONICS", "MISC"
-      // amount is estimated number of new items bought.
-      // Shopping factor is monthly baseline, so we estimate carbon cost per item.
-      // E.g. electronics = 80kg, clothing = 15kg, misc = 5kg
       let co2PerItem = 10;
       if (actionType === "ELECTRONICS") co2PerItem = 80;
       else if (actionType === "CLOTHING") co2PerItem = 15;

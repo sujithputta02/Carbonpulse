@@ -1,18 +1,6 @@
-import { UserProfile } from "./db";
+import { UserProfile } from "@/types/user";
+import { Tip, ScoredTip } from "@/types/recommendation";
 
-export interface Tip {
-  id: string;
-  title: string;
-  category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
-  reason: string;
-  impactScore: number; // 1-10 (carbon savings level)
-  effortScore: number; // 1-10 (10 being easiest)
-  costScore: number; // 1-10 (10 being saves most money, 1 being high investment)
-  potentialSavingsCO2e: number; // estimated monthly kg CO2e saved
-  applicabilityRule: (profile: UserProfile, categoryBreakdown: { transport: number; food: number; energy: number; shopping: number }) => boolean;
-}
-
-// Master list of carbon-reduction recommendations (tips)
 export const TIPS: Tip[] = [
   {
     id: "tip_walk_cycle",
@@ -24,7 +12,6 @@ export const TIPS: Tip[] = [
     costScore: 10,
     potentialSavingsCO2e: 45,
     applicabilityRule: (profile) => {
-      // Applicable if transport is a major emissions source or commute type is petrol/diesel and not NONE
       return profile.commuteType !== "NONE" && profile.commuteType !== "EV";
     },
   },
@@ -92,7 +79,7 @@ export const TIPS: Tip[] = [
     effortScore: 10,
     costScore: 10,
     potentialSavingsCO2e: 15,
-    applicabilityRule: () => true, // universally applicable
+    applicabilityRule: () => true,
   },
   {
     id: "tip_thermostat",
@@ -112,9 +99,9 @@ export const TIPS: Tip[] = [
     reason: "Smart thermostats optimize heating and cooling schedules, reducing energy waste while you are away or asleep.",
     impactScore: 6,
     effortScore: 6,
-    costScore: 5, // Requires an investment
+    costScore: 5,
     potentialSavingsCO2e: 55,
-    applicabilityRule: (profile) => profile.budgetSensitivity !== "HIGH", // Do not recommend to high budget sensitivity
+    applicabilityRule: (profile) => profile.budgetSensitivity !== "HIGH",
   },
   {
     id: "tip_secondhand",
@@ -125,7 +112,7 @@ export const TIPS: Tip[] = [
     effortScore: 7,
     costScore: 10,
     potentialSavingsCO2e: 70,
-    applicabilityRule: (profile) => profile.dietPattern !== undefined, // universally applicable
+    applicabilityRule: (profile) => profile.dietPattern !== undefined,
   },
   {
     id: "tip_electronics",
@@ -139,10 +126,6 @@ export const TIPS: Tip[] = [
     applicabilityRule: (profile) => profile.dietPattern !== undefined,
   },
 ];
-
-export interface ScoredTip extends Tip {
-  score: number;
-}
 
 /**
  * Ranks all available tips for the user based on profile traits and current category breakdown.
@@ -178,27 +161,23 @@ export function getRecommendedTips(
       }
 
       // Rule B: Match budget sensitivity (30% weight / +3 points)
-      // If user is HIGH budget-sensitive, favor high costScore (saves money)
       if (profile.budgetSensitivity === "HIGH") {
         if (tip.costScore >= 8) {
-          score += 3.0; // Cheap/saves money
+          score += 3.0;
         } else if (tip.costScore <= 5) {
-          score -= 3.0; // Deduct for high investment tips
+          score -= 3.0;
         }
       } else if (profile.budgetSensitivity === "LOW") {
-        // Low budget sensitivity means they have cash to invest in home improvements (e.g. smart thermostat)
         if (tip.costScore <= 6) {
-          score += 2.0; // Boost higher investment tips that they can afford
+          score += 2.0;
         }
       } else {
-        // Medium
         if (tip.costScore >= 7) {
           score += 1.5;
         }
       }
 
       // Rule C: Match goals (30% weight / +3 points)
-      // Goals: e.g. "SAVE_MONEY", "REDUCE_EMISSIONS", "BUILD_HABITS"
       if (profile.goals.includes("SAVE_MONEY") && tip.costScore >= 9) {
         score += 3.0;
       }
@@ -206,7 +185,7 @@ export function getRecommendedTips(
         score += 2.0;
       }
       if (profile.goals.includes("BUILD_HABITS") && tip.effortScore >= 8) {
-        score += 2.0; // favor easier habits
+        score += 2.0;
       }
 
       // Add small weights for core characteristics to break ties
@@ -226,4 +205,26 @@ export function getRecommendedTips(
     }
     return b.potentialSavingsCO2e - a.potentialSavingsCO2e;
   });
+}
+
+/**
+ * Filter scored recommendations based on active coaching filters.
+ */
+export function filterTipsByAttributes(
+  tips: ScoredTip[],
+  filter: "ALL" | "BUDGET_FRIENDLY" | "LOW_EFFORT" | "HIGH_IMPACT" | "TIME_SAVING"
+): ScoredTip[] {
+  switch (filter) {
+    case "BUDGET_FRIENDLY":
+      return tips.filter((tip) => tip.costScore >= 8);
+    case "LOW_EFFORT":
+      return tips.filter((tip) => tip.effortScore >= 8);
+    case "HIGH_IMPACT":
+      return tips.filter((tip) => tip.impactScore >= 8);
+    case "TIME_SAVING":
+      // Time-saving activities are low effort and don't require complex behavioral adjustments
+      return tips.filter((tip) => tip.effortScore >= 8 && tip.costScore >= 7);
+    default:
+      return tips;
+  }
 }

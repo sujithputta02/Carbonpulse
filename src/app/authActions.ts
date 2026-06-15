@@ -3,6 +3,7 @@
 import { db } from "@/utils/db";
 import { hashPassword, getCurrentUser, verifyPassword, setSessionCookie, clearSessionCookie } from "@/utils/auth";
 import { redirect } from "next/navigation";
+import { signupSchema, loginSchema } from "@/lib/validation/onboardingSchema";
 
 export interface AuthActionResult {
   error?: string;
@@ -16,12 +17,10 @@ export async function signupAction(prevState: AuthActionResult | null, formData:
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   
-  if (!email || !password) {
-    return { error: "Email and password are required." };
-  }
-  
-  if (password.length < 6) {
-    return { error: "Password must be at least 6 characters." };
+  // Zod Validation
+  const validated = signupSchema.safeParse({ email, password });
+  if (!validated.success) {
+    return { error: validated.error.issues[0].message };
   }
   
   const existingUser = db.getUserByEmail(email);
@@ -44,8 +43,10 @@ export async function loginAction(prevState: AuthActionResult | null, formData: 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   
-  if (!email || !password) {
-    return { error: "Email and password are required." };
+  // Zod Validation
+  const validated = loginSchema.safeParse({ email, password });
+  if (!validated.success) {
+    return { error: validated.error.issues[0].message };
   }
   
   const user = db.getUserByEmail(email);
@@ -58,7 +59,6 @@ export async function loginAction(prevState: AuthActionResult | null, formData: 
     return { error: "Invalid email or password." };
   }
   
-  // If legacy hash matched, upgrade it to salted hash
   if (verification.upgradeHash) {
     db.updateUserPasswordHash(user.id, verification.upgradeHash);
   }

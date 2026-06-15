@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { getRecommendedTips } from "../utils/recommender";
-import { UserProfile } from "../utils/db";
+import { getRecommendedTips } from "../lib/recommendations/rankActions";
+import { UserProfile } from "../types/user";
 
 const mockProfile: UserProfile = {
   id: "u1",

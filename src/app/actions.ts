@@ -1,13 +1,13 @@
 "use server";
 
 import crypto from "crypto";
-import { db, readDb, writeDb, UserProfile, ActivityLog, Goal, EmissionFactor } from "@/utils/db";
-import { calculateBaseline, calculateActivityCO2e } from "@/utils/calculator";
+import { db, readDb, writeDb } from "@/utils/db";
+import { UserProfile } from "@/types/user";
+import { ActivityLog, Goal, EmissionFactor, ImportedLogItem } from "@/types/activity";
+import { calculateBaseline, calculateActivityCO2e } from "@/lib/carbon/calculateFootprint";
 import { getCurrentUser, hashPassword, setSessionCookie } from "@/utils/auth";
+import { onboardingSchema, logActivitySchema, factorUpdateSchema } from "@/lib/validation/onboardingSchema";
 
-/**
- * Input structure for onboarding or resetting user baseline profile configuration.
- */
 export interface SaveProfileInput {
   name: string;
   location: string;
@@ -23,56 +23,43 @@ export interface SaveProfileInput {
 }
 
 /**
- * Log structure mapping the CSV/JSON schema during imports.
- */
-export interface ImportedLogItem {
-  id?: string;
-  category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
-  actionType: string;
-  amount: number;
-  date?: string;
-  estimatedCO2e: number;
-}
-
-/**
  * Server action to save user profile and compute the initial baseline.
- * Wipes old logs/goals belonging to this user for a fresh profile reset, and sets a default reduction goal.
- * 
- * @param input Onboarding questionnaire selections.
- * @returns The generated UserProfile.
  */
 export async function saveProfile(input: SaveProfileInput): Promise<UserProfile> {
   const user = await getCurrentUser();
   if (!user) {
     throw new Error("Unauthorized: Please log in first.");
   }
+
+  // Validate onboarding inputs with Zod
+  const validatedInput = onboardingSchema.parse(input);
   
   const factors = db.getFactors();
   
   // Calculate baseline monthly footprint using our calculator engine
   const calculation = calculateBaseline({
-    commuteType: input.commuteType,
-    commuteDistanceWeekly: input.commuteDistanceWeekly,
-    dietPattern: input.dietPattern,
-    electricityMonthlyKwh: input.electricityMonthlyKwh,
-    naturalGasMonthlyKwh: input.naturalGasMonthlyKwh,
-    householdSize: input.householdSize,
-    shoppingPattern: input.shoppingPattern,
+    commuteType: validatedInput.commuteType,
+    commuteDistanceWeekly: validatedInput.commuteDistanceWeekly,
+    dietPattern: validatedInput.dietPattern,
+    electricityMonthlyKwh: validatedInput.electricityMonthlyKwh,
+    naturalGasMonthlyKwh: validatedInput.naturalGasMonthlyKwh,
+    householdSize: validatedInput.householdSize,
+    shoppingPattern: validatedInput.shoppingPattern,
   }, factors);
 
   // Save profile to database
   const profile = db.saveProfile(user.id, {
-    name: input.name,
-    location: input.location,
-    householdSize: input.householdSize,
-    goals: input.goals,
-    budgetSensitivity: input.budgetSensitivity,
-    commuteType: input.commuteType,
-    dietPattern: input.dietPattern,
+    name: validatedInput.name,
+    location: validatedInput.location,
+    householdSize: validatedInput.householdSize,
+    goals: validatedInput.goals,
+    budgetSensitivity: validatedInput.budgetSensitivity,
+    commuteType: validatedInput.commuteType,
+    dietPattern: validatedInput.dietPattern,
     baselineFootprint: calculation.total,
   });
 
-  // Clear existing activities/goals for a clean start on profile reset (for this user only!)
+  // Clear existing activities/goals for a clean start on profile reset
   const rawDb = readDb();
   rawDb.activityLogs = rawDb.activityLogs.filter((l) => l.userId !== user.id);
   rawDb.goals = rawDb.goals.filter((g) => g.userId !== user.id);
@@ -97,10 +84,6 @@ export async function saveProfile(input: SaveProfileInput): Promise<UserProfile>
 
 /**
  * Server action to log a tracking activity.
- * Computes emissions on the fly based on the custom input parameters and active factors.
- * 
- * @param input Category details, activity type, and raw quantity.
- * @returns The newly appended ActivityLog.
  */
 export async function logActivity(input: {
   category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
@@ -116,30 +99,29 @@ export async function logActivity(input: {
   if (!profile) {
     throw new Error("No user profile found. Please complete onboarding first.");
   }
+
+  // Validate activity inputs with Zod
+  const validated = logActivitySchema.parse(input);
   
   const factors = db.getFactors();
   
-  // Calculate specific activity emissions
   const estimatedCO2e = calculateActivityCO2e(
-    input.category,
-    input.actionType,
-    input.amount,
+    validated.category,
+    validated.actionType,
+    validated.amount,
     factors
   );
 
   return db.addActivityLog(user.id, {
-    category: input.category,
-    actionType: input.actionType,
-    amount: input.amount,
+    category: validated.category,
+    actionType: validated.actionType,
+    amount: validated.amount,
     estimatedCO2e,
   });
 }
 
 /**
- * Server action to fetch dashboard details for the active authenticated user.
- * Returns empty structures if the user session does not exist.
- * 
- * @returns Combined user profile, logs list, goals list, and emission factor list.
+ * Server action to fetch dashboard details.
  */
 export async function getDashboardData() {
   const user = await getCurrentUser();
@@ -167,15 +149,12 @@ export async function getDashboardData() {
 
 /**
  * Server action to edit emissions factors (admin capability).
- * Logs an audit entry detailing the modified values.
- * 
- * @param key The factor coefficient configuration key.
- * @param value The numerical multiplier adjustment.
- * @param reason Clarification of changes.
- * @returns Updated factor settings.
  */
 export async function updateFactorAction(key: string, value: number, reason: string): Promise<EmissionFactor> {
-  const updated = db.updateFactor(key, value, reason);
+  // Validate factor update fields with Zod
+  const validated = factorUpdateSchema.parse({ key, value, reason });
+
+  const updated = db.updateFactor(validated.key, validated.value, validated.reason);
   if (!updated) {
     throw new Error(`Emission factor with key ${key} not found.`);
   }
@@ -184,9 +163,6 @@ export async function updateFactorAction(key: string, value: number, reason: str
 
 /**
  * Server action to delete an activity record.
- * 
- * @param id Globally unique identifier of the activity log.
- * @returns Status of deletion check.
  */
 export async function deleteActivityAction(id: string): Promise<boolean> {
   return db.deleteActivityLog(id);
@@ -194,18 +170,13 @@ export async function deleteActivityAction(id: string): Promise<boolean> {
 
 /**
  * Server action to toggle goal completion status.
- * 
- * @param id Globally unique goal UUID.
- * @param isCompleted Completion status toggle state.
- * @returns Updated Goal object.
  */
 export async function toggleGoalCompletionAction(id: string, isCompleted: boolean): Promise<Goal | null> {
   return db.updateGoal(id, { isCompleted });
 }
 
 /**
- * Server action to reset database profile data for the active user.
- * Retains administrative records and other accounts' data intact.
+ * Server action to reset database profile data.
  */
 export async function resetDatabaseAction(): Promise<void> {
   const user = await getCurrentUser();
@@ -220,7 +191,6 @@ export async function resetDatabaseAction(): Promise<void> {
 
 /**
  * Server action to seed realistic demo logs and goals.
- * Provisions a guest account "demo@carbonpulse.com" if no session exists, logging them in automatically.
  */
 export async function seedDemoDataAction(): Promise<void> {
   let user = await getCurrentUser();
@@ -233,9 +203,7 @@ export async function seedDemoDataAction(): Promise<void> {
       demoUser = db.createUser(demoEmail, defaultHash);
     }
     
-    // Log demo user in by setting the cookie session securely
     await setSessionCookie(demoUser.id);
-    
     user = demoUser;
   }
   
@@ -244,8 +212,6 @@ export async function seedDemoDataAction(): Promise<void> {
 
 /**
  * Server action to generate downloadable JSON and CSV log exports.
- * 
- * @returns Export strings packaged in JSON/CSV formats.
  */
 export async function getExportDataAction(): Promise<{
   jsonString: string;
@@ -259,7 +225,6 @@ export async function getExportDataAction(): Promise<{
   const logs = db.getActivityLogs(user.id);
   const jsonString = JSON.stringify(logs, null, 2);
   
-  // Build CSV
   const headers = ["id", "category", "actionType", "amount", "date", "estimatedCO2e"];
   const csvRows = [headers.join(",")];
   
@@ -281,9 +246,6 @@ export async function getExportDataAction(): Promise<{
 
 /**
  * Server action to parse and import logged items arrays.
- * 
- * @param importedLogs Array of parsed items to merge into the user profile.
- * @returns Success confirmation boolean.
  */
 export async function importLogsAction(importedLogs: ImportedLogItem[]): Promise<boolean> {
   const user = await getCurrentUser();
@@ -300,7 +262,7 @@ export async function importLogsAction(importedLogs: ImportedLogItem[]): Promise
   
   for (const item of importedLogs) {
     if (!item.category || !item.actionType || item.amount === undefined || item.estimatedCO2e === undefined) {
-      continue; // Skip invalid rows
+      continue;
     }
     const newLog: ActivityLog = {
       id: item.id || crypto.randomUUID(),

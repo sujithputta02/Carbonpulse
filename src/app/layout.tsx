@@ -3,6 +3,7 @@ import "./globals.css";
 import Link from "next/link";
 import { getCurrentUser } from "@/utils/auth";
 import { logoutAction } from "./authActions";
+import SkipLink from "@/components/SkipLink";
 
 export const metadata: Metadata = {
   title: "CarbonPulse — Personal Carbon Footprint Tracker & Coach",
@@ -19,6 +20,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth" data-scroll-behavior="smooth">
       <body className="min-h-screen flex flex-col font-sans bg-[#090d16] text-[#f8fafc]">
+        <SkipLink />
         {/* Responsive Sticky Navigation Header */}
         <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#090d16]/75 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -102,7 +104,7 @@ export default async function RootLayout({
         )}
 
         {/* Main Workspace */}
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+        <main id="main-content" className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
           {children}
         </main>
 

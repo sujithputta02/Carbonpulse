@@ -3,14 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { UserProfile, Goal, ActivityLog, EmissionFactor } from "@/utils/db";
-import { getRecommendedTips, ScoredTip } from "@/utils/recommender";
-import { SaveProfileInput } from "@/app/actions";
-import { calculateBaseline } from "@/utils/calculator";
-import { 
-  Leaf, Car, Zap, ShoppingBag, ArrowLeft, Star, 
-  ChevronDown, ChevronUp, Plus, CheckCircle2, Info, Loader2 
-} from "lucide-react";
+import { UserProfile } from "@/types/user";
+import { Goal, ActivityLog, EmissionFactor } from "@/types/activity";
+import { getRecommendedTips } from "@/lib/recommendations/rankActions";
+import { calculateBaseline } from "@/lib/carbon/calculateFootprint";
+import { ScoredTip } from "@/types/recommendation";
+
+import RecommendationList from "@/features/recommendations/components/RecommendationList";
+
+import { Leaf, ArrowLeft, Info, Loader2 } from "lucide-react";
 
 interface InsightsClientProps {
   profile: UserProfile | null;
@@ -25,8 +26,6 @@ export default function InsightsClient({
   factors,
 }: InsightsClientProps) {
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState<string>("ALL");
-  const [expandedTipId, setExpandedTipId] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   if (!profile) {
@@ -35,7 +34,7 @@ export default function InsightsClient({
         <div className="h-16 w-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto">
           <Leaf className="h-8 w-8 text-emerald-400" />
         </div>
-        <div>
+        <div className="text-left text-center">
           <h2 className="font-display font-extrabold text-2xl text-white">Baseline Required</h2>
           <p className="text-gray-400 text-sm mt-2">
             Please complete the onboarding setup to generate personalized recommendations.
@@ -52,23 +51,33 @@ export default function InsightsClient({
   const getProfileBreakdown = () => {
     const commuteDistanceWeekly = profile.commuteType === "NONE" ? 0 : 100;
     return calculateBaseline({
-      commuteType: profile.commuteType as SaveProfileInput["commuteType"],
+      commuteType: profile.commuteType,
       commuteDistanceWeekly,
-      dietPattern: profile.dietPattern as SaveProfileInput["dietPattern"],
+      dietPattern: profile.dietPattern,
       electricityMonthlyKwh: 250,
       naturalGasMonthlyKwh: 50,
       householdSize: profile.householdSize,
-      shoppingPattern: profile.dietPattern === "HIGH_MEAT" ? "HEAVY" as const : "MODERATE" as const,
+      shoppingPattern: profile.dietPattern === "HIGH_MEAT" ? ("HEAVY" as const) : ("MODERATE" as const),
     }, factors);
   };
 
   const breakdown = getProfileBreakdown();
   const recommendations = getRecommendedTips(profile, breakdown);
 
-  // Filter tips
-  const filteredTips = activeFilter === "ALL" 
-    ? recommendations 
-    : recommendations.filter((tip) => tip.category === activeFilter);
+  // Identify highest category
+  let highestCategory = "TRANSPORT";
+  let maxVal = breakdown.transport;
+  if (breakdown.food > maxVal) {
+    highestCategory = "FOOD";
+    maxVal = breakdown.food;
+  }
+  if (breakdown.energy > maxVal) {
+    highestCategory = "ENERGY";
+    maxVal = breakdown.energy;
+  }
+  if (breakdown.shopping > maxVal) {
+    highestCategory = "SHOPPING";
+  }
 
   // Toggle goal pinning
   const handlePinGoal = async (tip: ScoredTip) => {
@@ -85,7 +94,6 @@ export default function InsightsClient({
         createdAt: new Date().toISOString(),
       };
       
-      // Save locally
       const stored = localStorage.getItem("carbonpulse_db");
       if (stored) {
         const parsed = JSON.parse(stored);
@@ -98,16 +106,6 @@ export default function InsightsClient({
       console.error(e);
     } finally {
       setActionLoading(null);
-    }
-  };
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "TRANSPORT": return <Car className="h-4 w-4 text-emerald-400" />;
-      case "FOOD": return <Leaf className="h-4 w-4 text-cyan-400" />;
-      case "ENERGY": return <Zap className="h-4 w-4 text-amber-400" />;
-      case "SHOPPING": return <ShoppingBag className="h-4 w-4 text-purple-400" />;
-      default: return <Leaf className="h-4 w-4 text-gray-400" />;
     }
   };
 
@@ -139,134 +137,14 @@ export default function InsightsClient({
         </div>
       </div>
 
-      {/* Category filters */}
-      <div className="flex flex-wrap gap-2">
-        {["ALL", "TRANSPORT", "FOOD", "ENERGY", "SHOPPING"].map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setActiveFilter(filter)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
-              activeFilter === filter
-                ? "bg-emerald-500/10 border-emerald-500 text-emerald-400"
-                : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-
-      {/* Recommendations List */}
-      <div className="flex flex-col space-y-4">
-        {filteredTips.map((tip, idx) => {
-          const isExpanded = expandedTipId === tip.id;
-          const isPinned = goals.some((g) => g.title === tip.title);
-          
-          return (
-            <div
-              key={tip.id}
-              className={`glass-panel rounded-2xl border-white/5 transition-all overflow-hidden ${
-                idx === 0 && activeFilter === "ALL" ? "border-emerald-500/20 shadow-lg shadow-emerald-500/5" : ""
-              }`}
-            >
-              {/* Accordion Header */}
-              <div
-                onClick={() => setExpandedTipId(isExpanded ? null : tip.id)}
-                className="p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/5"
-              >
-                <div className="flex items-center space-x-3 text-left">
-                  <div className="h-9 w-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0">
-                    {getCategoryIcon(tip.category)}
-                  </div>
-                  <div>
-                    {idx === 0 && activeFilter === "ALL" && (
-                      <span className="text-[9px] font-bold tracking-wider text-emerald-400 uppercase flex items-center space-x-1 mb-0.5">
-                        <Star className="h-3 w-3 fill-emerald-400/20" />
-                        <span>Best Action Matches Your Profile</span>
-                      </span>
-                    )}
-                    <h3 className="font-semibold text-white text-sm sm:text-base leading-snug">{tip.title}</h3>
-                    <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold block mt-0.5">
-                      Est. Savings: <strong className="text-emerald-400">{tip.potentialSavingsCO2e} kg/mo</strong> • Category: {tip.category.toLowerCase()}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3 shrink-0">
-                  <span className="hidden sm:inline-flex text-[10px] bg-slate-900 border border-white/5 text-gray-400 px-2.5 py-1 rounded-full font-semibold">
-                    Score: {tip.score}
-                  </span>
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
-                </div>
-              </div>
-
-              {/* Accordion Body */}
-              {isExpanded && (
-                <div className="px-5 pb-6 pt-2 border-t border-white/5 bg-slate-900/10 flex flex-col space-y-4 text-left">
-                  <p className="text-gray-300 text-sm leading-relaxed">{tip.reason}</p>
-                  
-                  {/* Score Breakdown Bars */}
-                  <div className="grid sm:grid-cols-3 gap-4 pt-2">
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Carbon Savings</span>
-                        <span className="font-semibold text-white">{tip.impactScore}/10</span>
-                      </div>
-                      <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500" style={{ width: `${tip.impactScore * 10}%` }}></div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Adoption Ease</span>
-                        <span className="font-semibold text-white">{tip.effortScore}/10</span>
-                      </div>
-                      <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
-                        <div className="h-full bg-cyan-500" style={{ width: `${tip.effortScore * 10}%` }}></div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Budget Fit</span>
-                        <span className="font-semibold text-white">{tip.costScore}/10</span>
-                      </div>
-                      <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500" style={{ width: `${tip.costScore * 10}%` }}></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-end space-x-3 pt-4 border-t border-white/5">
-                    {isPinned ? (
-                      <span className="inline-flex items-center text-xs text-emerald-400 font-semibold py-2">
-                        <CheckCircle2 className="h-4 w-4 mr-1.5" />
-                        Pinned to Active Goals
-                      </span>
-                    ) : (
-                      <button
-                        disabled={actionLoading === tip.id}
-                        onClick={() => handlePinGoal(tip)}
-                        className="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-[#090d16] hover:bg-emerald-400 font-display transition-all active:scale-95 disabled:opacity-50"
-                      >
-                        {actionLoading === tip.id ? (
-                          <Loader2 className="animate-spin h-3.5 w-3.5" />
-                        ) : (
-                          <>
-                            <Plus className="mr-1.5 h-4 w-4 stroke-[3]" />
-                            Pin Action as Goal
-                          </>
-                        )}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <RecommendationList
+        tips={recommendations}
+        profile={profile}
+        highestCategory={highestCategory}
+        goals={goals}
+        actionLoading={actionLoading}
+        handlePinGoal={handlePinGoal}
+      />
     </div>
   );
 }

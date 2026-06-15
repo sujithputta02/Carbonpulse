@@ -1,107 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { UserAccount, UserProfile } from "@/types/user";
+import { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "@/types/activity";
+export type { UserAccount, UserProfile } from "@/types/user";
+export type { ActivityLog, Goal, EmissionFactor, AuditLog, DatabaseSchema } from "@/types/activity";
+import { DEFAULT_EMISSION_FACTORS } from "@/lib/carbon/emissionFactors";
 
 // Define the absolute path to the db.json file
 const DB_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DB_DIR, "db.json");
-
-// Define TypeScript interfaces for our data models
-export interface UserAccount {
-  id: string;
-  email: string;
-  passwordHash: string;
-  createdAt: string;
-}
-
-export interface UserProfile {
-  id: string;
-  name: string;
-  location: string;
-  householdSize: number;
-  goals: string[]; // e.g. ["SAVE_MONEY", "REDUCE_EMISSIONS"]
-  budgetSensitivity: "LOW" | "MEDIUM" | "HIGH";
-  commuteType: "CAR_PETROL" | "CAR_DIESEL" | "EV" | "TRANSIT" | "NONE";
-  dietPattern: "HIGH_MEAT" | "LOW_MEAT" | "VEGETARIAN" | "VEGAN";
-  baselineFootprint: number; // in kg CO2e / month
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ActivityLog {
-  id: string;
-  userId: string;
-  category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
-  actionType: string; // e.g. "PETROL_CAR_TRIP"
-  amount: number; // e.g. km traveled, counts of meals
-  date: string; // ISO string
-  estimatedCO2e: number; // kg CO2e
-}
-
-export interface Goal {
-  id: string;
-  userId: string;
-  title: string;
-  category: string;
-  targetCO2e: number;
-  isCompleted: boolean;
-  streakCount: number;
-  createdAt: string;
-}
-
-export interface EmissionFactor {
-  id: string;
-  category: string;
-  key: string;
-  value: number;
-  unit: string;
-  updatedAt: string;
-}
-
-export interface AuditLog {
-  id: string;
-  action: string; // e.g. "UPDATE_FACTOR", "DELETE_ACTIVITY"
-  tableName: string;
-  recordId: string;
-  oldValue: string;
-  newValue: string;
-  timestamp: string;
-}
-
-export interface DatabaseSchema {
-  users: UserAccount[];
-  userProfiles: UserProfile[];
-  activityLogs: ActivityLog[];
-  goals: Goal[];
-  emissionFactors: EmissionFactor[];
-  auditLogs: AuditLog[];
-}
-
-// Default emission factors to initialize the database with
-const DEFAULT_EMISSION_FACTORS: EmissionFactor[] = [
-  // Transport
-  { id: "f1", category: "TRANSPORT", key: "CAR_PETROL", value: 0.27, unit: "kg CO2e / km", updatedAt: new Date().toISOString() },
-  { id: "f2", category: "TRANSPORT", key: "CAR_DIESEL", value: 0.25, unit: "kg CO2e / km", updatedAt: new Date().toISOString() },
-  { id: "f3", category: "TRANSPORT", key: "EV", value: 0.05, unit: "kg CO2e / km", updatedAt: new Date().toISOString() },
-  { id: "f4", category: "TRANSPORT", key: "TRANSIT_BUS", value: 0.08, unit: "kg CO2e / passenger-km", updatedAt: new Date().toISOString() },
-  { id: "f5", category: "TRANSPORT", key: "TRANSIT_TRAIN", value: 0.04, unit: "kg CO2e / passenger-km", updatedAt: new Date().toISOString() },
-  { id: "f6", category: "TRANSPORT", key: "FLIGHT_SHORT", value: 0.15, unit: "kg CO2e / km", updatedAt: new Date().toISOString() },
-  { id: "f7", category: "TRANSPORT", key: "FLIGHT_LONG", value: 0.12, unit: "kg CO2e / km", updatedAt: new Date().toISOString() },
-  
-  // Food
-  { id: "f8", category: "FOOD", key: "DIET_HIGH_MEAT", value: 7.26, unit: "kg CO2e / day", updatedAt: new Date().toISOString() },
-  { id: "f9", category: "FOOD", key: "DIET_LOW_MEAT", value: 4.67, unit: "kg CO2e / day", updatedAt: new Date().toISOString() },
-  { id: "f10", category: "FOOD", key: "DIET_VEGETARIAN", value: 3.81, unit: "kg CO2e / day", updatedAt: new Date().toISOString() },
-  { id: "f11", category: "FOOD", key: "DIET_VEGAN", value: 2.89, unit: "kg CO2e / day", updatedAt: new Date().toISOString() },
-  
-  // Home Energy
-  { id: "f12", category: "ENERGY", key: "ELECTRICITY", value: 0.38, unit: "kg CO2e / kWh", updatedAt: new Date().toISOString() },
-  { id: "f13", category: "ENERGY", key: "NATURAL_GAS", value: 0.18, unit: "kg CO2e / kWh", updatedAt: new Date().toISOString() },
-  
-  // Shopping
-  { id: "f14", category: "SHOPPING", key: "CONSUMER_HEAVY", value: 350.0, unit: "kg CO2e / month", updatedAt: new Date().toISOString() },
-  { id: "f15", category: "SHOPPING", key: "CONSUMER_MODERATE", value: 180.0, unit: "kg CO2e / month", updatedAt: new Date().toISOString() },
-  { id: "f16", category: "SHOPPING", key: "CONSUMER_MINIMALIST", value: 50.0, unit: "kg CO2e / month", updatedAt: new Date().toISOString() },
-];
 
 // In-memory cache for the parsed database structure to optimize CPU and memory allocation
 let cachedDb: DatabaseSchema | null = null;
