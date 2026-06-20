@@ -9,6 +9,7 @@ import { ActivityLog, Goal, EmissionFactor } from "@/types/activity";
 import { calculateBaseline } from "@/lib/carbon/calculateFootprint";
 import { getRecommendedTips } from "@/lib/recommendations/rankActions";
 import { ScoredTip } from "@/types/recommendation";
+import { logError, getErrorMessage } from "@/lib/clientErrors";
 
 import SummaryGrid from "@/features/dashboard/components/SummaryGrid";
 import FootprintCharts from "@/features/dashboard/components/FootprintCharts";
@@ -151,8 +152,9 @@ export default function DashboardClient({
       if (ok) {
         setLogs((prev) => prev.filter((log) => log.id !== id));
       }
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logError("Failed to delete activity log", error, { activityId: id, userId: profile.id });
+      alert(getErrorMessage(error));
     } finally {
       setActionLoading(null);
     }
@@ -168,8 +170,9 @@ export default function DashboardClient({
           prev.map((g) => (g.id === id ? { ...g, isCompleted: updated.isCompleted } : g))
         );
       }
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logError("Failed to toggle goal completion", error, { goalId: id, currentStatus });
+      alert(getErrorMessage(error));
     } finally {
       setActionLoading(null);
     }
@@ -199,8 +202,9 @@ export default function DashboardClient({
       
       setGoals((prev) => [...prev, newGoal]);
       router.refresh();
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logError("Failed to pin recommendation as goal", error, { tipId: tip.id, userId: profile.id });
+      alert(getErrorMessage(error));
     } finally {
       setActionLoading(null);
     }
@@ -233,8 +237,9 @@ export default function DashboardClient({
 
       setLogs((prev) => [newLog, ...prev]);
       router.refresh();
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logError("Failed to quick-log activity from tip", error, { tipId: tip.id });
+      alert(getErrorMessage(error));
     } finally {
       setActionLoading(null);
     }
