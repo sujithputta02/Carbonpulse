@@ -17,11 +17,11 @@ export default function LogHistoryTable({
 }: LogHistoryTableProps) {
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "TRANSPORT": return <Car className="h-4 w-4 text-emerald-400" />;
-      case "FOOD": return <Leaf className="h-4 w-4 text-cyan-400" />;
-      case "ENERGY": return <Zap className="h-4 w-4 text-amber-400" />;
-      case "SHOPPING": return <ShoppingBag className="h-4 w-4 text-purple-400" />;
-      default: return <Leaf className="h-4 w-4 text-gray-400" />;
+      case "TRANSPORT": return <Car className="h-4 w-4 text-emerald-400" aria-hidden="true" />;
+      case "FOOD": return <Leaf className="h-4 w-4 text-cyan-400" aria-hidden="true" />;
+      case "ENERGY": return <Zap className="h-4 w-4 text-amber-400" aria-hidden="true" />;
+      case "SHOPPING": return <ShoppingBag className="h-4 w-4 text-purple-400" aria-hidden="true" />;
+      default: return <Leaf className="h-4 w-4 text-gray-400" aria-hidden="true" />;
     }
   };
 
@@ -38,7 +38,7 @@ export default function LogHistoryTable({
   if (logs.length === 0) {
     return (
       <div className="p-12 text-center text-gray-500 flex flex-col items-center justify-center space-y-3 glass-panel rounded-2xl border-white/5">
-        <AlertCircle className="h-10 w-10 text-gray-600" />
+        <AlertCircle className="h-10 w-10 text-gray-600" aria-hidden="true" />
         <p className="text-sm">No activity logs found.</p>
       </div>
     );
@@ -46,7 +46,16 @@ export default function LogHistoryTable({
 
   return (
     <div className="overflow-x-auto w-full">
+      <div 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {logs.length === 0 ? "No activity logs found." : `Showing ${logs.length} activity log entries. Most recent entries appear first.`}
+      </div>
       <table className="w-full text-left text-sm">
+        <caption className="sr-only">Activity log history showing tracked carbon emissions by category, date, and quantity</caption>
         <thead className="text-xs text-gray-400 uppercase tracking-wider bg-slate-900/50 border-b border-white/5">
           <tr>
             <th scope="col" className="px-6 py-4">Activity</th>
@@ -82,19 +91,19 @@ export default function LogHistoryTable({
                   {Math.round(log.estimatedCO2e)} kg CO₂e
                 </td>
                 <td className="px-6 py-4 text-gray-400 text-xs">
-                  {new Date(log.date).toLocaleDateString()}
+                  {log.date.split('T')[0]}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <button
                     disabled={isDeleting}
                     onClick={() => handleDelete(log.id)}
+                    aria-label={`Delete ${log.actionType.replace(/_/g, " ").toLowerCase()} activity log from ${log.date.split('T')[0]}`}
                     className="p-2 rounded bg-white/5 border border-white/5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors inline-flex items-center justify-center cursor-pointer"
-                    title="Delete log"
                   >
                     {isDeleting ? (
-                      <Loader2 className="animate-spin h-3.5 w-3.5" />
+                      <Loader2 className="animate-spin h-3.5 w-3.5" aria-label="Deleting" />
                     ) : (
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                     )}
                   </button>
                 </td>

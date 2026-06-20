@@ -113,9 +113,10 @@ export default function TrackClient() {
       <div className="flex items-center space-x-3">
         <Link
           href="/dashboard"
+          aria-label="Go back to dashboard"
           className="p-2 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 text-gray-300 transition-colors"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5" aria-hidden="true" />
         </Link>
         <div>
           <h1 className="font-display font-extrabold text-3xl text-white">Log Daily Activities</h1>
@@ -123,28 +124,41 @@ export default function TrackClient() {
         </div>
       </div>
 
-      {/* Success / Error notices */}
+      {/* Success / Error notices with ARIA live regions */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm font-semibold flex items-center space-x-2">
-          <CheckCircle2 className="h-5 w-5 shrink-0" />
+        <div 
+          role="status" 
+          aria-live="polite" 
+          className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm font-semibold flex items-center space-x-2"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {errorMsg && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm font-semibold flex items-center space-x-2">
-          <AlertCircle className="h-5 w-5 shrink-0" />
+        <div 
+          role="alert" 
+          aria-live="assertive" 
+          className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm font-semibold flex items-center space-x-2"
+        >
+          <AlertCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Categories Tabs */}
-      <div className="flex border-b border-white/5 space-x-4">
+      {/* Categories Tabs with proper ARIA tablist pattern */}
+      <div role="tablist" aria-label="Activity categories" className="flex border-b border-white/5 space-x-4">
         {(["TRANSPORT", "FOOD", "ENERGY", "SHOPPING"] as CategoryType[]).map((cat) => {
           const active = activeTab === cat;
           return (
             <button
               key={cat}
+              role="tab"
+              id={`${cat.toLowerCase()}-tab`}
+              aria-selected={active}
+              aria-controls={`${cat.toLowerCase()}-panel`}
+              tabIndex={active ? 0 : -1}
               onClick={() => {
                 setActiveTab(cat);
                 if (cat === "TRANSPORT") setActionType("PETROL_CAR");
@@ -154,7 +168,7 @@ export default function TrackClient() {
                 setSuccessMsg(null);
                 setErrorMsg(null);
               }}
-              className={`pb-3 text-sm font-semibold flex items-center space-x-2 border-b-2 transition-all cursor-pointer ${
+              className={`pb-3 text-sm font-semibold flex items-center space-x-2 border-b-2 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950 ${
                 active
                   ? "border-emerald-500 text-emerald-400 font-bold"
                   : "border-transparent text-gray-400 hover:text-gray-200"
@@ -167,7 +181,7 @@ export default function TrackClient() {
         })}
       </div>
 
-      <div className="grid md:grid-cols-5 gap-8">
+      <div role="tabpanel" id={`${activeTab.toLowerCase()}-panel`} aria-labelledby={`${activeTab.toLowerCase()}-tab`} className="grid md:grid-cols-5 gap-8">
         <div className="md:col-span-3">
           <PresetLogger
             activeTab={activeTab}

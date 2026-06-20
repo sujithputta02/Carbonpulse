@@ -18,25 +18,39 @@ export default function GoalsChecklist({
   return (
     <div className="glass-panel rounded-3xl p-6 border-white/5 flex flex-col space-y-4 h-full">
       <div className="flex justify-between items-center text-left">
-        <h3 className="font-display font-bold text-lg text-white">Active Goals</h3>
-        <span className="text-xs text-gray-400 font-semibold">
+        <h2 className="font-display font-bold text-lg text-white">Active Goals</h2>
+        <span 
+          aria-live="polite" 
+          aria-atomic="true"
+          className="text-xs text-gray-400 font-semibold"
+        >
           {completedCount}/{goals.length} Done
         </span>
       </div>
 
       {goals.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-gray-500">
-          <CheckCircle2 className="h-8 w-8 text-gray-600 mb-2" />
+          <CheckCircle2 className="h-8 w-8 text-gray-600 mb-2" aria-hidden="true" />
           <p className="text-sm">No active goals pinned. Select suggestions from the insights tab to build habits.</p>
         </div>
       ) : (
-        <div className="flex flex-col space-y-3 overflow-y-auto max-h-[320px]">
+        <div className="flex flex-col space-y-3 overflow-y-auto max-h-[320px]" role="list" aria-label="Active carbon reduction goals">
           {goals.map((goal) => {
             const isToggling = actionLoading === `goal_${goal.id}`;
             return (
               <div
                 key={goal.id}
+                role="checkbox"
+                aria-checked={goal.isCompleted}
+                aria-label={`${goal.title}. Target monthly savings: ${goal.targetCO2e} kg CO₂e. ${goal.isCompleted ? "Completed" : "Not completed"}`}
+                tabIndex={isToggling ? -1 : 0}
                 onClick={() => !isToggling && handleToggleGoal(goal.id, goal.isCompleted)}
+                onKeyDown={(e) => {
+                  if ((e.key === 'Enter' || e.key === ' ') && !isToggling) {
+                    e.preventDefault();
+                    handleToggleGoal(goal.id, goal.isCompleted);
+                  }
+                }}
                 className={`p-4 rounded-xl border flex items-center justify-between gap-4 cursor-pointer transition-all hover:bg-white/5 ${
                   goal.isCompleted
                     ? "bg-emerald-500/5 border-emerald-500/30 text-gray-400"
@@ -52,7 +66,7 @@ export default function GoalsChecklist({
                   </span>
                 </div>
 
-                <div className="shrink-0">
+                <div className="shrink-0" aria-hidden="true">
                   {isToggling ? (
                     <Loader2 className="animate-spin h-5 w-5 text-emerald-400" />
                   ) : goal.isCompleted ? (

@@ -130,9 +130,10 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
       <div className="flex items-center space-x-3">
         <Link
           href="/dashboard"
+          aria-label="Go back to dashboard"
           className="p-2 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 text-gray-300 transition-colors"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5" aria-hidden="true" />
         </Link>
         <div>
           <h1 className="font-display font-extrabold text-3xl text-white">Activity Log History</h1>
@@ -143,11 +144,13 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
       {/* Filter and stats banner */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
         {/* Category filters */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Category filter options">
           {["ALL", "TRANSPORT", "FOOD", "ENERGY", "SHOPPING"].map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
+              aria-pressed={activeFilter === filter}
+              aria-label={`Filter by ${filter === "ALL" ? "all categories" : filter.toLowerCase()}`}
               className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                 activeFilter === filter
                   ? "bg-emerald-500/10 border-emerald-500 text-emerald-400"
@@ -169,11 +172,12 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
       {/* Data Operations Control Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
         <div className="flex items-center space-x-2 text-xs text-gray-400">
-          <Download className="h-4 w-4 text-emerald-400" />
+          <Download className="h-4 w-4 text-emerald-400" aria-hidden="true" />
           <span>Export Logs:</span>
           <button
             onClick={() => handleExport("json")}
             disabled={exporting}
+            aria-label="Export logs as JSON file"
             className="px-3 py-1 rounded bg-slate-950 border border-white/10 hover:border-emerald-500 hover:text-emerald-400 transition-colors text-white font-semibold text-[11px] cursor-pointer disabled:opacity-50"
           >
             JSON
@@ -181,6 +185,7 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
           <button
             onClick={() => handleExport("csv")}
             disabled={exporting}
+            aria-label="Export logs as CSV file"
             className="px-3 py-1 rounded bg-slate-950 border border-white/10 hover:border-emerald-500 hover:text-emerald-400 transition-colors text-white font-semibold text-[11px] cursor-pointer disabled:opacity-50"
           >
             CSV
@@ -188,7 +193,7 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
         </div>
 
         <div className="flex items-center space-x-2 text-xs text-gray-400">
-          <Upload className="h-4 w-4 text-cyan-400" />
+          <Upload className="h-4 w-4 text-cyan-400" aria-hidden="true" />
           <span>Import Logs (.json / .csv):</span>
           <label className="px-3 py-1 rounded bg-slate-950 border border-white/10 hover:border-cyan-500 hover:text-cyan-400 transition-colors text-white font-semibold text-[11px] cursor-pointer relative">
             {importing ? "Importing..." : "Choose File"}
@@ -197,6 +202,7 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
               accept=".json,.csv"
               disabled={importing}
               onChange={handleImport}
+              aria-label="Choose file to import activity logs"
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
             />
           </label>
@@ -207,7 +213,7 @@ export default function HistoryClient({ initialLogs }: HistoryClientProps) {
       <div className="glass-panel rounded-3xl border-white/5 overflow-hidden">
         {filteredLogs.length === 0 ? (
           <div className="p-16 text-center text-gray-500 flex flex-col items-center justify-center space-y-3">
-            <AlertCircle className="h-10 w-10 text-gray-600" />
+            <AlertCircle className="h-10 w-10 text-gray-600" aria-hidden="true" />
             <p className="text-sm">No logged activities found matching your filters.</p>
             <Link href="/track" className="inline-flex items-center text-xs font-semibold bg-emerald-500 text-[#090d16] px-4 py-2 rounded-xl">
               Track Activity

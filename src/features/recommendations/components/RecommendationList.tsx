@@ -56,14 +56,16 @@ export default function RecommendationList({
       <div className="flex flex-col space-y-4">
         {/* Category Filters */}
         <div className="flex flex-col space-y-1.5 text-left">
-          <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Filter by Category</label>
+          <h3 className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Filter by Category</h3>
           <div className="flex flex-wrap gap-2">
             {["ALL", "TRANSPORT", "FOOD", "ENERGY", "SHOPPING"].map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                aria-label={`Filter by ${cat} category`}
+                aria-pressed={activeCategory === cat}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                   activeCategory === cat
                     ? "bg-emerald-500/10 border-emerald-500 text-emerald-400 font-semibold"
                     : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
@@ -77,7 +79,7 @@ export default function RecommendationList({
 
         {/* Attribute Filters */}
         <div className="flex flex-col space-y-1.5 text-left">
-          <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Refine Suggestions</label>
+          <h3 className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Refine Suggestions</h3>
           <div className="flex flex-wrap gap-2">
             {[
               { key: "ALL", label: "All Priorities" },
@@ -90,7 +92,9 @@ export default function RecommendationList({
                 key={attr.key}
                 type="button"
                 onClick={() => setActiveAttribute(attr.key as any)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                aria-label={`Filter by ${attr.label}`}
+                aria-pressed={activeAttribute === attr.key}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
                   activeAttribute === attr.key
                     ? "bg-cyan-500/10 border-cyan-500 text-cyan-400 font-semibold"
                     : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
@@ -125,18 +129,21 @@ export default function RecommendationList({
                 }`}
               >
                 {/* Accordion Header */}
-                <div
+                <button
                   onClick={() => setExpandedTipId(isExpanded ? null : tip.id)}
-                  className="p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/5"
+                  aria-expanded={isExpanded}
+                  aria-controls={`tip-content-${tip.id}`}
+                  aria-label={`${tip.title}. Est. savings: ${tip.potentialSavingsCO2e} kg per month. ${isExpanded ? "Collapse" : "Expand"} details`}
+                  className="w-full p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/5 text-left"
                 >
                   <div className="flex items-center space-x-3 text-left">
-                    <div className="h-9 w-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0">
+                    <div className="h-9 w-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0" aria-hidden="true">
                       {getCategoryIcon(tip.category)}
                     </div>
                     <div>
                       {idx === 0 && activeCategory === "ALL" && activeAttribute === "ALL" && (
                         <span className="text-[9px] font-bold tracking-wider text-emerald-400 uppercase flex items-center space-x-1 mb-0.5">
-                          <Star className="h-3 w-3 fill-emerald-400/20" />
+                          <Star className="h-3 w-3 fill-emerald-400/20" aria-hidden="true" />
                           <span>Best Action Matches Your Profile</span>
                         </span>
                       )}
@@ -151,13 +158,13 @@ export default function RecommendationList({
                     <span className="hidden sm:inline-flex text-[10px] bg-slate-900 border border-white/5 text-gray-400 px-2.5 py-1 rounded-full font-semibold">
                       Score: {tip.score}
                     </span>
-                    {isExpanded ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
+                    {isExpanded ? <ChevronUp className="h-4 w-4 text-gray-500" aria-hidden="true" /> : <ChevronDown className="h-4 w-4 text-gray-500" aria-hidden="true" />}
                   </div>
-                </div>
+                </button>
 
                 {/* Accordion Body */}
                 {isExpanded && (
-                  <div className="px-5 pb-6 pt-2 border-t border-white/5 bg-slate-900/10 flex flex-col space-y-4 text-left">
+                  <div id={`tip-content-${tip.id}`} role="region" aria-labelledby={`tip-header-${tip.id}`} className="px-5 pb-6 pt-2 border-t border-white/5 bg-slate-900/10 flex flex-col space-y-4 text-left">
                     <p className="text-gray-300 text-sm leading-relaxed">{personalizedExplanation}</p>
                     
                     {/* Score Breakdown Bars */}
@@ -167,7 +174,7 @@ export default function RecommendationList({
                           <span>Carbon Savings</span>
                           <span className="font-semibold text-white">{tip.impactScore}/10</span>
                         </div>
-                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
+                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden" role="progressbar" aria-valuenow={tip.impactScore} aria-valuemin={0} aria-valuemax={10} aria-label={`Carbon savings score: ${tip.impactScore} out of 10`}>
                           <div className="h-full bg-emerald-500" style={{ width: `${tip.impactScore * 10}%` }}></div>
                         </div>
                       </div>
@@ -177,7 +184,7 @@ export default function RecommendationList({
                           <span>Adoption Ease</span>
                           <span className="font-semibold text-white">{tip.effortScore}/10</span>
                         </div>
-                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
+                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden" role="progressbar" aria-valuenow={tip.effortScore} aria-valuemin={0} aria-valuemax={10} aria-label={`Adoption ease score: ${tip.effortScore} out of 10`}>
                           <div className="h-full bg-cyan-500" style={{ width: `${tip.effortScore * 10}%` }}></div>
                         </div>
                       </div>
@@ -187,7 +194,7 @@ export default function RecommendationList({
                           <span>Budget Fit</span>
                           <span className="font-semibold text-white">{tip.costScore}/10</span>
                         </div>
-                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden">
+                        <div className="w-full h-1 bg-gray-950 rounded-full overflow-hidden" role="progressbar" aria-valuenow={tip.costScore} aria-valuemin={0} aria-valuemax={10} aria-label={`Budget fit score: ${tip.costScore} out of 10`}>
                           <div className="h-full bg-amber-500" style={{ width: `${tip.costScore * 10}%` }}></div>
                         </div>
                       </div>
@@ -196,20 +203,21 @@ export default function RecommendationList({
                     <div className="flex items-center justify-end space-x-3 pt-4 border-t border-white/5">
                       {isPinned ? (
                         <span className="inline-flex items-center text-xs text-emerald-400 font-semibold py-2">
-                          <CheckCircle2 className="h-4 w-4 mr-1.5" />
+                          <CheckCircle2 className="h-4 w-4 mr-1.5" aria-hidden="true" />
                           Pinned to Active Goals
                         </span>
                       ) : (
                         <button
                           disabled={actionLoading === tip.id}
                           onClick={() => handlePinGoal(tip)}
+                          aria-label={`Pin ${tip.title} as an active goal`}
                           className="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-[#090d16] hover:bg-emerald-400 font-display transition-all active:scale-95 disabled:opacity-50"
                         >
                           {actionLoading === tip.id ? (
-                            <Loader2 className="animate-spin h-3.5 w-3.5" />
+                            <Loader2 className="animate-spin h-3.5 w-3.5" aria-label="Pinning goal" />
                           ) : (
                             <>
-                              <Plus className="mr-1.5 h-4 w-4 stroke-[3]" />
+                              <Plus className="mr-1.5 h-4 w-4 stroke-[3]" aria-hidden="true" />
                               Pin Action as Goal
                             </>
                           )}

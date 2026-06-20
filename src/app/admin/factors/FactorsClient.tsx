@@ -180,30 +180,30 @@ export default function FactorsClient({
                               <button
                                 disabled={loading}
                                 onClick={() => handleSaveFactor(factor.key)}
-                                className="p-1.5 rounded bg-emerald-500 text-[#090d16] hover:bg-emerald-400 transition-colors inline-flex items-center justify-center"
-                                title="Save changes"
+                                aria-label="Save factor changes"
+                                className="p-1.5 rounded bg-emerald-500 text-[#090d16] hover:bg-emerald-400 transition-colors inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
                               >
                                 {loading ? (
-                                  <Loader2 className="animate-spin h-3.5 w-3.5" />
+                                  <Loader2 className="animate-spin h-3.5 w-3.5" aria-hidden="true" />
                                 ) : (
-                                  <Check className="h-3.5 w-3.5 stroke-[3]" />
+                                  <Check className="h-3.5 w-3.5 stroke-[3]" aria-hidden="true" />
                                 )}
                               </button>
                               <button
                                 onClick={handleCancelEdit}
-                                className="p-1.5 rounded bg-white/5 border border-white/5 text-gray-400 hover:text-gray-200 transition-colors"
-                                title="Cancel edit"
+                                aria-label="Cancel editing this factor"
+                                className="p-1.5 rounded bg-white/5 border border-white/5 text-gray-400 hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
                               >
-                                <ArrowLeft className="h-3.5 w-3.5" />
+                                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                               </button>
                             </div>
                           ) : (
                             <button
                               onClick={() => handleStartEdit(factor)}
-                              className="p-1.5 rounded bg-white/5 border border-white/5 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors inline-flex items-center justify-center"
-                              title="Edit factor"
+                              aria-label={`Edit ${factor.key} emission factor`}
+                              className="p-1.5 rounded bg-white/5 border border-white/5 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
                             >
-                              <Edit3 className="h-3.5 w-3.5" />
+                              <Edit3 className="h-3.5 w-3.5" aria-hidden="true" />
                             </button>
                           )}
                         </td>

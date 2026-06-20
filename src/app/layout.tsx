@@ -112,14 +112,14 @@ export default async function RootLayout({
         <footer className="w-full border-t border-white/5 bg-[#070b12] py-6 mt-12 text-center text-xs text-gray-500">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>© {new Date().getFullYear()} CarbonPulse. Personalized ecological feedback.</p>
-            <div className="flex space-x-6">
-              <Link href="/about" className="hover:text-gray-300 transition-colors">
+            <nav className="flex space-x-6" aria-label="Footer Navigation">
+              <Link href="/about" className="hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-1">
                 Science & Factors
               </Link>
-              <Link href="/privacy" className="hover:text-gray-300 transition-colors">
+              <Link href="/privacy" className="hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-1">
                 Privacy Policy
               </Link>
-            </div>
+            </nav>
           </div>
         </footer>
       </body>

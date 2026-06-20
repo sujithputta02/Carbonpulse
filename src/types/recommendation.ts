@@ -4,8 +4,11 @@ import { CategoryType } from "./activity";
 export interface Tip {
   id: string;
   title: string;
+  description?: string;
   category: CategoryType;
   reason: string;
+  whyItMatters?: string;
+  howToDo?: string;
   impactScore: number; // 1-10 (carbon savings level)
   effortScore: number; // 1-10 (10 being easiest)
   costScore: number; // 1-10 (10 being saves most money)

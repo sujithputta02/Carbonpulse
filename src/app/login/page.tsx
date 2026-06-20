@@ -15,7 +15,7 @@ export default function LoginPage() {
         
         <div className="text-center space-y-2">
           <div className="h-12 w-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/20">
-            <Leaf className="h-6 w-6 text-emerald-400" />
+            <Leaf className="h-6 w-6 text-emerald-400" aria-hidden="true" />
           </div>
           <h2 className="font-display font-extrabold text-2xl text-white">Welcome Back</h2>
           <p className="text-gray-400 text-xs font-medium">
@@ -25,7 +25,12 @@ export default function LoginPage() {
 
         <form action={formAction} className="mt-8 space-y-6">
           {state?.error && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-xs text-rose-400 text-center font-medium">
+            <div 
+              id="form-error-message"
+              role="alert" 
+              aria-live="assertive" 
+              className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-xs text-rose-400 text-center font-medium"
+            >
               {state.error}
             </div>
           )}
@@ -38,7 +43,7 @@ export default function LoginPage() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <input
                   id="email"
@@ -47,7 +52,14 @@ export default function LoginPage() {
                   autoComplete="email"
                   required
                   placeholder="name@example.com"
-                  className="block w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                  aria-invalid={!!state?.error}
+                  aria-errormessage={state?.error ? "form-error-message" : undefined}
+                  aria-describedby={state?.error ? "form-error-message" : undefined}
+                  className={`block w-full pl-10 pr-4 py-3 bg-slate-950/50 border rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 transition-all font-medium ${
+                    state?.error
+                      ? "border-rose-500/50 focus:border-rose-500 focus:ring-rose-500"
+                      : "border-white/10 focus:border-emerald-500 focus:ring-emerald-500"
+                  }`}
                 />
               </div>
             </div>
@@ -59,7 +71,7 @@ export default function LoginPage() {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
-                  <Lock className="h-4 w-4" />
+                  <Lock className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <input
                   id="password"
@@ -68,7 +80,14 @@ export default function LoginPage() {
                   autoComplete="current-password"
                   required
                   placeholder="••••••••"
-                  className="block w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                  aria-invalid={!!state?.error}
+                  aria-errormessage={state?.error ? "form-error-message" : undefined}
+                  aria-describedby={state?.error ? "form-error-message" : undefined}
+                  className={`block w-full pl-10 pr-4 py-3 bg-slate-950/50 border rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 transition-all font-medium ${
+                    state?.error
+                      ? "border-rose-500/50 focus:border-rose-500 focus:ring-rose-500"
+                      : "border-white/10 focus:border-emerald-500 focus:ring-emerald-500"
+                  }`}
                 />
               </div>
             </div>
@@ -78,14 +97,15 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="group relative w-full flex justify-center py-3.5 px-4 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 font-display shadow-lg shadow-emerald-500/10"
+              aria-label={isPending ? "Signing in, please wait" : "Sign in to your account"}
+              className="group relative w-full flex justify-center py-3.5 px-4 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 font-display shadow-lg shadow-emerald-500/10 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {isPending ? (
-                <Loader2 className="animate-spin h-5 w-5" />
+                <Loader2 className="animate-spin h-5 w-5" aria-label="Signing in" />
               ) : (
                 <span className="flex items-center">
                   Sign In
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               )}
             </button>

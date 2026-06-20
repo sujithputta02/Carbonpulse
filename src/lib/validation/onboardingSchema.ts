@@ -1,13 +1,58 @@
 import { z } from "zod";
+import { strongPasswordSchema } from "./passwordSchema";
 
-// Authentication Schemas
+/**
+ * AUTHENTICATION SCHEMAS
+ * ======================
+ * Zod validation schemas for user authentication with security best practices.
+ * 
+ * **Security Features:**
+ * - Strong password requirements (OWASP compliant)
+ * - Email format validation
+ * - Input sanitization (trim, lowercase)
+ */
+
+/**
+ * Signup validation schema with strong password requirements.
+ * 
+ * **Password Requirements:**
+ * - Minimum 8 characters (was 6, now stronger)
+ * - At least one uppercase letter
+ * - At least one lowercase letter
+ * - At least one number
+ * - At least one special character
+ * - Not in common weak password list
+ * 
+ * **Why Strong Passwords Matter:**
+ * - 6-char passwords can be cracked in seconds
+ * - 8-char with complexity takes years
+ * - Protects users from account takeover
+ */
 export const signupSchema = z.object({
-  email: z.string().email("Please provide a valid email address."),
-  password: z.string().min(6, "Password must be at least 6 characters long."),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Please provide a valid email address."),
+  password: strongPasswordSchema,
 });
 
+/**
+ * Login validation schema.
+ * Less strict than signup since we're checking against existing hash.
+ * 
+ * **Security Note:**
+ * We don't enforce complexity on login because:
+ * - User may have created account with old requirements
+ * - Password is checked against stored hash
+ * - Failed attempts should be rate-limited (separate layer)
+ */
 export const loginSchema = z.object({
-  email: z.string().email("Please provide a valid email address."),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Please provide a valid email address."),
   password: z.string().min(1, "Password is required."),
 });
 

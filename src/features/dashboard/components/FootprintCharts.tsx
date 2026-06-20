@@ -85,33 +85,38 @@ export default function FootprintCharts({
       {/* Category Split Donut Chart (2 cols) */}
       <div className="lg:col-span-2 glass-panel rounded-3xl p-6 border-white/5 flex flex-col space-y-4">
         <div className="flex justify-between items-center text-left">
-          <h3 className="font-display font-bold text-lg text-white">Baseline Breakdown</h3>
+          <h2 className="font-display font-bold text-lg text-white">Baseline Breakdown</h2>
           <span className="text-[10px] uppercase font-semibold text-gray-500">Categories</span>
         </div>
 
         <div className="h-64 w-full relative min-w-0">
           {mounted ? (
-            <ResponsiveContainer width="99%" height={256} minWidth={0} minHeight={0} initialDimension={{ width: 300, height: 256 }}>
-              <PieChart>
-                <Pie
-                  data={donutData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={4}
-                  dataKey="value"
-                >
-                  {donutData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ background: "#090d16", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "12px" }}
-                  itemStyle={{ color: "#f8fafc" }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+            <div 
+              role="img" 
+              aria-label="Carbon footprint breakdown by category: Transport, Food, Home Energy, and Shopping. Interactive pie chart showing the distribution of your baseline emissions."
+            >
+              <ResponsiveContainer width="99%" height={256} minWidth={0} minHeight={0} initialDimension={{ width: 300, height: 256 }}>
+                <PieChart>
+                  <Pie
+                    data={donutData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={4}
+                    dataKey="value"
+                  >
+                    {donutData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ background: "#090d16", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "12px" }}
+                    itemStyle={{ color: "#f8fafc" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           ) : (
             <div className="h-full w-full flex items-center justify-center text-xs text-gray-500">Loading chart...</div>
           )}
@@ -162,28 +167,33 @@ export default function FootprintCharts({
       {/* Weekly Logged Chart (3 cols) */}
       <div className="lg:col-span-3 glass-panel rounded-3xl p-6 border-white/5 flex flex-col space-y-4">
         <div className="flex justify-between items-center text-left">
-          <h3 className="font-display font-bold text-lg text-white">Emissions Tracked over Time</h3>
+          <h2 className="font-display font-bold text-lg text-white">Emissions Tracked over Time</h2>
           <span className="text-[10px] uppercase font-semibold text-gray-500">Last 4 Weeks</span>
         </div>
 
         <div className="h-64 w-full min-w-0">
           {mounted ? (
-            <ResponsiveContainer width="99%" height={256} minWidth={0} minHeight={0} initialDimension={{ width: 400, height: 256 }}>
-              <BarChart data={weeklyChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="week" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ background: "#090d16", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "12px" }}
-                  itemStyle={{ color: "#f8fafc" }}
-                />
-                <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
-                <Bar dataKey="transport" name="Transport" stackId="a" fill={COLORS.transport} />
-                <Bar dataKey="food" name="Food" stackId="a" fill={COLORS.food} />
-                <Bar dataKey="energy" name="Energy" stackId="a" fill={COLORS.energy} />
-                <Bar dataKey="shopping" name="Shopping" stackId="a" fill={COLORS.shopping} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div 
+              role="img" 
+              aria-label="Weekly emissions tracked over the last 4 weeks across all categories: Transport, Food, Home Energy, and Shopping. Stacked bar chart showing trends in your carbon footprint over time."
+            >
+              <ResponsiveContainer width="99%" height={256} minWidth={0} minHeight={0} initialDimension={{ width: 400, height: 256 }}>
+                <BarChart data={weeklyChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="week" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{ background: "#090d16", borderColor: "rgba(255, 255, 255, 0.1)", borderRadius: "12px" }}
+                    itemStyle={{ color: "#f8fafc" }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
+                  <Bar dataKey="transport" name="Transport" stackId="a" fill={COLORS.transport} />
+                  <Bar dataKey="food" name="Food" stackId="a" fill={COLORS.food} />
+                  <Bar dataKey="energy" name="Energy" stackId="a" fill={COLORS.energy} />
+                  <Bar dataKey="shopping" name="Shopping" stackId="a" fill={COLORS.shopping} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           ) : (
             <div className="h-full w-full flex items-center justify-center text-xs text-gray-500">Loading chart...</div>
           )}

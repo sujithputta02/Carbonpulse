@@ -76,19 +76,20 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
             <Link
               href="/onboarding"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 group font-bold"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 group font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               Start Onboarding
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
             <button
               disabled={seeding}
               onClick={handleSeed}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-colors cursor-pointer disabled:opacity-50"
+              aria-label={seeding ? "Loading demo dashboard, please wait" : "Explore demo dashboard with sample data"}
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-colors cursor-pointer disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {seeding ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" aria-hidden="true" />
                   Seeding Demo Data...
                 </>
               ) : (
@@ -131,14 +132,17 @@ export default function LandingPage() {
                 step="25"
                 value={commuteDist}
                 onChange={(e) => setCommuteDist(Number(e.target.value))}
-                className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                aria-label={`Commute distance: ${commuteDist} km per week`}
+                className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <div className="grid grid-cols-4 gap-1 pt-1">
                 {(["petrol", "ev", "transit", "none"] as const).map((type) => (
                   <button
                     key={type}
                     onClick={() => setCommuteType(type)}
-                    className={`px-1 py-1 rounded text-xs border text-center capitalize transition-colors ${
+                    aria-label={`Commute by ${type === "petrol" ? "petrol car" : type === "ev" ? "electric vehicle" : type === "transit" ? "public transit" : "no commute"}`}
+                    aria-pressed={commuteType === type}
+                    className={`px-1 py-1 rounded text-xs border text-center capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                       commuteType === type
                         ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-semibold"
                         : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
@@ -152,13 +156,15 @@ export default function LandingPage() {
 
             {/* Diet Pattern */}
             <div className="space-y-2">
-              <label className="text-xs text-gray-300 block">Diet Pattern:</label>
-              <div className="grid grid-cols-3 gap-1">
+              <label htmlFor="diet-select" className="text-xs text-gray-300 block">Diet Pattern:</label>
+              <div className="grid grid-cols-3 gap-1" role="group" aria-labelledby="diet-label">
                 {(["meat", "veggie", "vegan"] as const).map((d) => (
                   <button
                     key={d}
                     onClick={() => setDiet(d)}
-                    className={`px-2 py-1 rounded text-xs border text-center capitalize transition-colors ${
+                    aria-label={`${d === "meat" ? "Meat Lover" : d === "veggie" ? "Vegetarian" : "Vegan"} diet pattern`}
+                    aria-pressed={diet === d}
+                    className={`px-2 py-1 rounded text-xs border text-center capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                       diet === d
                         ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-semibold"
                         : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
@@ -172,13 +178,15 @@ export default function LandingPage() {
 
             {/* Shopping Pattern */}
             <div className="space-y-2">
-              <label className="text-xs text-gray-300 block">Shopping Pattern:</label>
-              <div className="grid grid-cols-3 gap-1">
+              <label htmlFor="shopping-select" className="text-xs text-gray-300 block">Shopping Pattern:</label>
+              <div className="grid grid-cols-3 gap-1" role="group" aria-labelledby="shopping-label">
                 {(["heavy", "moderate", "minimalist"] as const).map((s) => (
                   <button
                     key={s}
                     onClick={() => setShopping(s)}
-                    className={`px-2 py-1 rounded text-xs border text-center capitalize transition-colors ${
+                    aria-label={`${s} shopping pattern`}
+                    aria-pressed={shopping === s}
+                    className={`px-2 py-1 rounded text-xs border text-center capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                       shopping === s
                         ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-semibold"
                         : "bg-white/5 border-transparent text-gray-400 hover:bg-white/10"
@@ -283,7 +291,7 @@ export default function LandingPage() {
         </div>
         <Link
           href="/onboarding"
-          className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-semibold rounded-xl bg-white text-[#090d16] hover:bg-gray-100 font-display transition-all hover:scale-105 active:scale-95 shadow-lg relative z-10"
+          className="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-semibold rounded-xl bg-white text-[#090d16] hover:bg-gray-100 font-display transition-all hover:scale-105 active:scale-95 shadow-lg relative z-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-950"
         >
           Setup My Profile
         </Link>

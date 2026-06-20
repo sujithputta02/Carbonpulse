@@ -17,6 +17,12 @@ import GoalsChecklist from "@/features/dashboard/components/GoalsChecklist";
 import CoachAssistant from "@/features/recommendations/components/CoachAssistant";
 import WhyThisMattersCard from "@/features/recommendations/components/WhyThisMattersCard";
 import LogHistoryTable from "@/features/tracking/components/LogHistoryTable";
+import FootprintExplainer from "@/features/dashboard/components/FootprintExplainer";
+import WeeklyFeedback from "@/features/dashboard/components/WeeklyFeedback";
+import TransparencyCard from "@/features/dashboard/components/TransparencyCard";
+import StreakAndNudges from "@/features/dashboard/components/StreakAndNudges";
+import MicroDoseRecommendation from "@/features/recommendations/components/MicroDoseRecommendation";
+import PresetLogger from "@/features/tracking/components/PresetLogger";
 
 import { Leaf, Calendar, ArrowRight } from "lucide-react";
 
@@ -248,77 +254,146 @@ export default function DashboardClient({
   return (
     <div className="flex flex-col space-y-8">
       {/* 1. Header & Quick Summary */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
-        <div>
-          <h1 className="font-display font-extrabold text-3xl text-white">Welcome back, {profile.name}</h1>
-          <p className="text-sm text-gray-400">Here is your customized carbon coach & footprint pulse.</p>
+      <section aria-labelledby="dashboard-title">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
+          <div>
+            <h1 id="dashboard-title" className="font-display font-extrabold text-3xl text-white">Welcome back, {profile.name}</h1>
+            <p className="text-sm text-gray-300">Here is your customized carbon coach & footprint pulse.</p>
+          </div>
+          <div className="flex items-center space-x-3 text-xs bg-slate-900 border border-white/5 rounded-2xl p-3 shadow-inner">
+            <Calendar className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            <span className="font-medium text-gray-300">Tracking Month: <strong className="text-white">{new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</strong></span>
+          </div>
         </div>
-        <div className="flex items-center space-x-3 text-xs bg-slate-900 border border-white/5 rounded-2xl p-3 shadow-inner">
-          <Calendar className="h-4 w-4 text-emerald-400" />
-          <span className="font-medium text-gray-300">Tracking Month: <strong className="text-white">{new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</strong></span>
-        </div>
-      </div>
+      </section>
 
       {/* 2. Primary Summary Cards */}
-      <SummaryGrid
-        baselineFootprint={profile.baselineFootprint}
-        totalTrackedMonth={totalTrackedMonth}
-        activeGoalsCount={goals.filter((g) => !g.isCompleted).length}
-        completedGoalsCount={goals.filter((g) => g.isCompleted).length}
-        streakCount={streakCount}
-      />
+      <section aria-labelledby="summary-title">
+        <div id="summary-title" className="sr-only">Your Carbon Summary</div>
+        <SummaryGrid
+          baselineFootprint={profile.baselineFootprint}
+          totalTrackedMonth={totalTrackedMonth}
+          activeGoalsCount={goals.filter((g) => !g.isCompleted).length}
+          completedGoalsCount={goals.filter((g) => g.isCompleted).length}
+          streakCount={streakCount}
+        />
+      </section>
 
       {/* 3. Primary Coach Recommendation Card & Weekly Comparison */}
       {primaryTip && (
-        <CoachAssistant
-          primaryTip={primaryTip}
-          profile={profile}
-          highestCategory={highestCategory}
-          logs={logs}
-          actionLoading={actionLoading}
-          handleQuickLogTip={handleQuickLogTip}
-          handlePinRecommendation={handlePinRecommendation}
-        />
+        <section aria-labelledby="coach-title">
+          <div id="coach-title" className="sr-only">AI Coach Recommendations</div>
+          <CoachAssistant
+            primaryTip={primaryTip}
+            profile={profile}
+            highestCategory={highestCategory}
+            logs={logs}
+            actionLoading={actionLoading}
+            handleQuickLogTip={handleQuickLogTip}
+            handlePinRecommendation={handlePinRecommendation}
+          />
+        </section>
       )}
 
+      {/* 3.5. Weekly Feedback - "You reduced X kg" */}
+      <section aria-labelledby="weekly-feedback-title">
+        <div id="weekly-feedback-title" className="sr-only">Your Weekly Progress</div>
+        <WeeklyFeedback
+          logs={logs}
+          baseline={profile.baselineFootprint}
+          topCategory={highestCategory}
+        />
+      </section>
+
+      {/* 3.7. Streak & Nudges - Habit Formation */}
+      <section aria-labelledby="streak-title">
+        <div id="streak-title" className="sr-only">Your Tracking Streak</div>
+        <StreakAndNudges logs={logs} />
+      </section>
+
       {/* Science 'Why this matters' Card for Highest Category */}
-      <WhyThisMattersCard highestCategory={highestCategory} />
+      <section aria-labelledby="science-title">
+        <div id="science-title" className="sr-only">Why This Matters - Scientific Context</div>
+        <WhyThisMattersCard highestCategory={highestCategory} />
+      </section>
+
+      {/* 3.9. Footprint Explainer - "What makes up your footprint?" */}
+      <section aria-labelledby="explainer-title">
+        <div id="explainer-title" className="sr-only">Understanding Your Carbon Footprint Breakdown</div>
+        <FootprintExplainer
+          breakdown={breakdown}
+          topCategory={highestCategory}
+          monthlyTotal={profile.baselineFootprint}
+        />
+      </section>
 
       {/* 4. Charts Section */}
-      <FootprintCharts
-        breakdown={breakdown}
-        logs={logs}
-        mounted={mounted}
-      />
+      <section aria-labelledby="charts-title">
+        <div id="charts-title" className="sr-only">Your Carbon Footprint Analytics</div>
+        <FootprintCharts
+          breakdown={breakdown}
+          logs={logs}
+          mounted={mounted}
+        />
+      </section>
 
       {/* 5. Lower Content: Goals & Recent Activity Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Active Goals Checklist */}
-        <GoalsChecklist
-          goals={goals}
-          handleToggleGoal={handleToggleGoal}
-          actionLoading={actionLoading}
-        />
+      <section aria-labelledby="tracking-title">
+        <div id="tracking-title" className="sr-only">Goals and Activity Tracking</div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Active Goals Checklist */}
+          <GoalsChecklist
+            goals={goals}
+            handleToggleGoal={handleToggleGoal}
+            actionLoading={actionLoading}
+          />
 
-        {/* Recent Activity Feed */}
-        <div className="glass-panel rounded-3xl p-6 border-white/5 flex flex-col space-y-4">
-          <div className="flex justify-between items-center text-left">
-            <h3 className="font-display font-bold text-lg text-white">Recent Log History</h3>
-            <Link href="/history" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold cursor-pointer">
-              View All
-            </Link>
-          </div>
+          {/* Recent Activity Feed */}
+          <div className="glass-panel rounded-3xl p-6 border-white/5 flex flex-col space-y-4">
+            <div className="flex justify-between items-center text-left">
+              <h2 className="font-display font-bold text-lg text-white">Recent Log History</h2>
+              <Link href="/history" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-1">
+                View All
+              </Link>
+            </div>
 
-          <div className="overflow-y-auto max-h-[320px]">
-            <LogHistoryTable
-              logs={logs.slice(0, 5)}
-              actionLoading={actionLoading}
-              handleDelete={handleDeleteActivity}
-              showCategoryIcon={true}
-            />
+            <div className="overflow-y-auto max-h-[320px]">
+              <LogHistoryTable
+                logs={logs.slice(0, 5)}
+                actionLoading={actionLoading}
+                handleDelete={handleDeleteActivity}
+                showCategoryIcon={true}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 6. Transparency & Trust */}
+      <section aria-labelledby="transparency-title">
+        <div id="transparency-title" className="sr-only">How We Calculate Your Emissions</div>
+        <TransparencyCard />
+      </section>
+
+      {/* 7. Top Micro-Dose Recommendations */}
+      {recommendations.length > 0 && (
+        <section aria-labelledby="recommendations-title">
+          <h2 id="recommendations-title" className="font-display font-bold text-xl text-white mb-4">
+            Recommended Actions for You
+          </h2>
+          <div className="space-y-4">
+            {recommendations.slice(0, 3).map((tip) => (
+              <MicroDoseRecommendation
+                key={tip.id}
+                recommendation={tip}
+                onPin={handlePinRecommendation}
+                isPinned={goals.some((g) => g.title === tip.title)}
+                loading={actionLoading === `pin_${tip.id}`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

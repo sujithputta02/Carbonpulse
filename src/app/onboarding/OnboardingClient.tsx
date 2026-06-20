@@ -179,13 +179,13 @@ export default function OnboardingClient() {
 
   return (
     <div className="max-w-2xl mx-auto w-full flex flex-col space-y-8 py-4 sm:py-8">
-      {/* Top Banner Indicator */}
+      {/* Top Banner Indicator with ARIA support */}
       <div className="flex flex-col space-y-3">
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-emerald-400">
           <span>Profile Onboarding</span>
-          <span>Step {step} of {stepsCount}</span>
+          <span aria-live="polite" aria-atomic="true">Step {step} of {stepsCount}</span>
         </div>
-        <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden" role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Onboarding progress">
           <div
             className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
@@ -196,7 +196,11 @@ export default function OnboardingClient() {
       {/* Main Glass Form Card */}
       <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 sm:p-10 border-white/5 flex flex-col space-y-8 text-left">
         {errors.submit && (
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm font-medium">
+          <div 
+            role="alert" 
+            aria-live="assertive" 
+            className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm font-medium"
+          >
             {errors.submit}
           </div>
         )}
@@ -257,9 +261,10 @@ export default function OnboardingClient() {
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-gray-300 transition-colors cursor-pointer"
+              aria-label={`Go back to step ${step - 1}`}
+              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-gray-300 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
               Back
             </button>
           ) : (
@@ -270,25 +275,27 @@ export default function OnboardingClient() {
             <button
               type="button"
               onClick={handleNext}
-              className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              aria-label={`Continue to step ${step + 1}`}
+              className="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               Next
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
             </button>
           ) : (
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center px-6 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer"
+              aria-label={loading ? "Completing setup" : "Finish setting up your profile"}
+              className="inline-flex items-center px-6 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" aria-hidden="true" />
                   Calculating...
                 </>
               ) : (
                 <>
-                  <Leaf className="mr-2 h-4 w-4" />
+                  <Leaf className="mr-2 h-4 w-4" aria-hidden="true" />
                   Complete Setup
                 </>
               )}

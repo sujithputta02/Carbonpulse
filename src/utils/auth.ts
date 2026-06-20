@@ -5,9 +5,33 @@ import { db, UserAccount } from "./db";
 /**
  * Secret key used for signing session cookies with HMAC.
  * This prevents attackers from tampering with user session data.
- * In production, always set SESSION_SECRET in environment variables.
+ * 
+ * **SECURITY CRITICAL:**
+ * - Must be set via SESSION_SECRET environment variable
+ * - Never use fallback values in production (security vulnerability)
+ * - Should be at least 32 characters of random data
+ * - Rotate regularly for security best practices
+ * 
+ * **Consequences of missing secret:**
+ * - Application fails to start (fail-fast security)
+ * - Better than using weak/known fallback value
+ * - Forces proper configuration in all environments
  */
-const SESSION_SECRET = process.env.SESSION_SECRET || "carbon-pulse-fallback-secret-2026-secure-32chars";
+function getSessionSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  
+  if (!secret) {
+    throw new Error(
+      "SECURITY ERROR: SESSION_SECRET environment variable is not set. " +
+      "This is required for secure session management. " +
+      "Generate a secret: openssl rand -base64 32"
+    );
+  }
+  
+  return secret;
+}
+
+const SESSION_SECRET = getSessionSecret();
 
 /**
  * Salt added to passwords before hashing.

@@ -48,7 +48,12 @@ export default function CoachAssistant({
   return (
     <div className="flex flex-col space-y-6">
       {/* 1. What Changed This Week Banner */}
-      <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${getTrendClass()}`}>
+      <div 
+        role="status" 
+        aria-live="assertive" 
+        aria-atomic="true"
+        className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${getTrendClass()}`}
+      >
         <div className="flex items-start space-x-3 text-left">
           <div className="mt-0.5 shrink-0">
             {getTrendIcon()}
