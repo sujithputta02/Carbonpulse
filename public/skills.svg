@@ -1,150 +1,168 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 320" width="100%">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
-      
-      .inv-bg { fill: #06090e; }
-      .inv-border { 
-        fill: none; 
-        stroke: #00f0ff; 
-        stroke-width: 2.5; 
-        filter: url(#glow-blue);
-        animation: borderPulseBlue 5s infinite ease-in-out;
+      @font-face {
+      font-family: 'Press Start 2P';
+      src: url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+      font-weight: normal;
+      font-style: normal;
       }
-      .inv-grid { fill: none; stroke: #1f2937; stroke-width: 1; }
+      
+      .bg-sky { fill: #5c94fc; }
+      
+      .cloud { fill: #ffffff; }
       
       .text-title { 
         font-family: 'Press Start 2P', monospace; 
         font-size: 14px; 
-        fill: #39ff14; 
-        filter: url(#glow-green);
-        text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
-        animation: titleGlow 3s infinite ease-in-out;
+        fill: #ffffff; 
+        stroke: #000000;
+        stroke-width: 2.5;
+        paint-order: stroke fill;
       }
+      
       .text-cat { 
         font-family: 'Press Start 2P', monospace; 
         font-size: 9px; 
-        fill: #ff007f; 
-        animation: categoryPulse 4s infinite ease-in-out;
+        fill: #b83c18;
+        font-weight: bold;
       }
-      .text-item { font-family: 'Press Start 2P', monospace; font-size: 8px; fill: #e2e8f0; }
-      .item-slot { 
-        fill: #0d1117; 
-        stroke: #374151; 
-        stroke-width: 1.5; 
+      
+      .text-item { 
+        font-family: 'Press Start 2P', monospace; 
+        font-size: 8px; 
+        fill: #000000; 
+      }
+      
+      /* Retro Dialogue Style Slots */
+      .item-slot {
+        fill: #fde6c7; 
+        stroke: #000000; 
+        stroke-width: 2; 
         transition: all 0.3s ease;
       }
       
-      /* Active Level Indicators */
-      .item-active-1 { animation: activeItem 6s infinite ease-in-out; }
-      .item-active-2 { animation: activeItem 6s infinite ease-in-out 1.5s; }
-      .item-active-3 { animation: activeItem 6s infinite ease-in-out 3s; }
-      .item-active-4 { animation: activeItem 6s infinite ease-in-out 4.5s; }
-
-      @keyframes borderPulseBlue {
-        0%, 100% { stroke: #00f0ff; filter: drop-shadow(0 0 2px #00f0ff); }
-        50% { stroke: #ff007f; filter: drop-shadow(0 0 6px #ff007f); }
+      /* Glowing dialogue panel container */
+      .dialogue-panel-bg {
+        fill: #fce4a0;
+        stroke: #000000;
+        stroke-width: 3;
       }
-
-      @keyframes titleGlow {
-        0%, 100% { fill: #39ff14; filter: drop-shadow(0 0 4px rgba(57,255,20,0.6)); }
-        50% { fill: #00f0ff; filter: drop-shadow(0 0 8px rgba(0,240,255,0.8)); }
+      
+      .dialogue-panel-inner {
+        fill: none;
+        stroke: #b83c18;
+        stroke-width: 1.5;
       }
-
-      @keyframes categoryPulse {
-        0%, 100% { fill: #ff007f; }
-        50% { fill: #ff00ff; opacity: 0.8; }
-      }
+      
+      .item-active-1 { animation: activeItem 4s infinite ease-in-out; }
+      .item-active-2 { animation: activeItem 4s infinite ease-in-out 1s; }
+      .item-active-3 { animation: activeItem 4s infinite ease-in-out 2s; }
+      .item-active-4 { animation: activeItem 4s infinite ease-in-out 3s; }
 
       @keyframes activeItem {
-        0%, 100% { stroke: #374151; fill: #0d1117; }
-        50% { stroke: #39ff14; fill: #111e15; }
+        0%, 100% { fill: #fde6c7; stroke: #000000; }
+        50% { fill: #ffffff; stroke: #b83c18; }
+      }
+      
+      /* Ground blocks at the bottom */
+      .ground-top { fill: #fc9838; }
+      .ground-side { fill: #b83c18; }
+      
+      .cloud-bg-1 { animation: cloudDrift 60s infinite linear; }
+      .cloud-bg-2 { animation: cloudDrift 90s infinite linear -45s; }
+
+      @keyframes cloudDrift {
+        0% { transform: translateX(850px); }
+        100% { transform: translateX(-200px); }
       }
     </style>
-    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    <!-- Grid Pattern -->
-    <pattern id="inv-grid-pat" width="10" height="10" patternUnits="userSpaceOnUse">
-      <path d="M 10 0 L 0 0 0 10" class="inv-grid"/>
-    </pattern>
   </defs>
 
-  <!-- Container -->
-  <rect width="850" height="320" rx="8" class="inv-bg"/>
-  <rect width="850" height="320" rx="8" fill="url(#inv-grid-pat)"/>
-  <rect x="5" y="5" width="840" height="310" rx="6" class="inv-border"/>
+  <!-- Sky Background -->
+  <rect width="850" height="320" class="bg-sky"/>
+
+  <!-- Clouds Background -->
+  <g class="cloud-bg-1" transform="translate(150, 10)">
+    <path d="M120,20 C110,20 100,28 100,38 C90,38 80,46 80,56 C80,66 90,74 100,74 L160,74 C170,74 180,66 180,56 C180,46 170,38 160,38 C160,28 150,20 140,20 Z" class="cloud" opacity="0.6"/>
+  </g>
+  <g class="cloud-bg-2" transform="translate(550, 20)">
+    <path d="M60,10 C55,10 50,14 50,19 C45,19 40,23 40,28 C40,33 45,37 50,37 L80,37 C85,37 90,33 90,28 C90,23 85,19 80,19 C80,14 75,10 70,10 Z" class="cloud" opacity="0.5"/>
+  </g>
 
   <!-- Screen Header -->
-  <text x="425" y="35" class="text-title" text-anchor="middle">⚡ HERO EQUIPMENT &amp; SKILLS INVENTORY ⚡</text>
+  <text x="425" y="32" class="text-title" text-anchor="middle">> HERO EQUIPMENT &amp; SKILLS INVENTORY &lt;</text>
+
+  <!-- Main dialogue board panel -->
+  <rect x="25" y="45" width="800" height="235" rx="10" class="dialogue-panel-bg"/>
+  <rect x="31" y="51" width="788" height="223" rx="6" class="dialogue-panel-inner"/>
 
   <!-- CATEGORY 1: LANGUAGES -->
-  <text x="35" y="70" class="text-cat">/WEAPONS_LANGUAGES</text>
+  <text x="45" y="75" class="text-cat">/WEAPONS_LANGUAGES</text>
   <!-- Slot 1: Python -->
-  <rect x="35" y="85" width="175" height="40" rx="4" class="item-slot item-active-1"/>
-  <text x="45" y="109" class="text-item">🐍 Python [LV99]</text>
+  <rect x="45" y="87" width="175" height="36" rx="4" class="item-slot item-active-1"/>
+  <text x="55" y="109" class="text-item">🐍 Python [LV99]</text>
   <!-- Slot 2: TypeScript -->
-  <rect x="35" y="135" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="45" y="159" class="text-item">🔷 TypeScript [LV95]</text>
+  <rect x="45" y="131" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="55" y="153" class="text-item">🔷 TypeScript [LV95]</text>
   <!-- Slot 3: JavaScript -->
-  <rect x="35" y="185" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="45" y="209" class="text-item">💛 JavaScript [LV95]</text>
+  <rect x="45" y="175" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="55" y="197" class="text-item">💛 JavaScript [LV95]</text>
   <!-- Slot 4: HTML/CSS -->
-  <rect x="35" y="235" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="45" y="259" class="text-item">🌐 HTML5/CSS3 [LV92]</text>
+  <rect x="45" y="219" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="55" y="241" class="text-item">🌐 HTML5/CSS3 [LV92]</text>
 
   <!-- CATEGORY 2: FRAMEWORKS -->
-  <text x="240" y="70" class="text-cat">/ARMOR_FRAMEWORKS</text>
+  <text x="240" y="75" class="text-cat">/ARMOR_FRAMEWORKS</text>
   <!-- Slot 1: Next.js -->
-  <rect x="240" y="85" width="175" height="40" rx="4" class="item-slot"/>
+  <rect x="240" y="87" width="175" height="36" rx="4" class="item-slot"/>
   <text x="250" y="109" class="text-item">▲ Next.js [LV90]</text>
   <!-- Slot 2: React -->
-  <rect x="240" y="135" width="175" height="40" rx="4" class="item-slot item-active-2"/>
-  <text x="250" y="159" class="text-item">⚛️ React [LV90]</text>
+  <rect x="240" y="131" width="175" height="36" rx="4" class="item-slot item-active-2"/>
+  <text x="250" y="153" class="text-item">⚛️ React [LV90]</text>
   <!-- Slot 3: Node.js -->
-  <rect x="240" y="185" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="250" y="209" class="text-item">🟢 Node.js [LV90]</text>
+  <rect x="240" y="175" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="250" y="197" class="text-item">🟢 Node.js [LV90]</text>
   <!-- Slot 4: Bun -->
-  <rect x="240" y="235" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="250" y="259" class="text-item">🍞 Bun [LV85]</text>
+  <rect x="240" y="219" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="250" y="241" class="text-item">🍞 Bun [LV85]</text>
 
   <!-- CATEGORY 3: DATABASES -->
-  <text x="445" y="70" class="text-cat">/POTIONS_DATABASES</text>
+  <text x="435" y="75" class="text-cat">/POTIONS_DATABASES</text>
   <!-- Slot 1: PostgreSQL -->
-  <rect x="445" y="85" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="455" y="109" class="text-item">🐘 PostgreSQL [LV85]</text>
+  <rect x="435" y="87" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="445" y="109" class="text-item">🐘 PostgreSQL [LV85]</text>
   <!-- Slot 2: Prisma ORM -->
-  <rect x="445" y="135" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="455" y="159" class="text-item">⏏️ Prisma [LV85]</text>
+  <rect x="435" y="131" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="445" y="153" class="text-item">⏏️ Prisma [LV85]</text>
   <!-- Slot 3: SQL -->
-  <rect x="445" y="185" width="175" height="40" rx="4" class="item-slot item-active-3"/>
-  <text x="455" y="209" class="text-item">📊 SQL Query [LV88]</text>
+  <rect x="435" y="175" width="175" height="36" rx="4" class="item-slot item-active-3"/>
+  <text x="445" y="197" class="text-item">📊 SQL Query [LV88]</text>
   <!-- Slot 4: Tailwind CSS -->
-  <rect x="445" y="235" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="455" y="259" class="text-item">🎨 Tailwind [LV95]</text>
+  <rect x="435" y="219" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="445" y="241" class="text-item">🎨 Tailwind [LV95]</text>
 
   <!-- CATEGORY 4: AI & DEVOPS -->
-  <text x="640" y="70" class="text-cat">/SPELLS_AI_DEVOPS</text>
+  <text x="630" y="75" class="text-cat">/SPELLS_AI_DEVOPS</text>
   <!-- Slot 1: Python AI -->
-  <rect x="640" y="85" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="650" y="109" class="text-item">🤖 Python AI [LV90]</text>
+  <rect x="630" y="87" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="640" y="109" class="text-item">🤖 Python AI [LV90]</text>
   <!-- Slot 2: RAG Systems -->
-  <rect x="640" y="135" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="650" y="159" class="text-item">🧠 RAG / LLM [LV90]</text>
+  <rect x="630" y="131" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="640" y="153" class="text-item">🧠 RAG / LLM [LV90]</text>
   <!-- Slot 3: Docker -->
-  <rect x="640" y="185" width="175" height="40" rx="4" class="item-slot"/>
-  <text x="650" y="209" class="text-item">🐳 Docker [LV80]</text>
+  <rect x="630" y="175" width="175" height="36" rx="4" class="item-slot"/>
+  <text x="640" y="197" class="text-item">🐳 Docker [LV80]</text>
   <!-- Slot 4: Git / DevOps -->
-  <rect x="640" y="235" width="175" height="40" rx="4" class="item-slot item-active-4"/>
-  <text x="650" y="259" class="text-item">🐙 Git / CI-CD [LV90]</text>
+  <rect x="630" y="219" width="175" height="36" rx="4" class="item-slot item-active-4"/>
+  <text x="640" y="241" class="text-item">🐙 Git / CI-CD [LV90]</text>
 
-  <!-- Bottom Stats Frame Info -->
-  <rect x="35" y="285" width="780" height="20" fill="#0d1117" rx="3" stroke="#ff007f" stroke-opacity="0.3"/>
-  <text x="45" y="298" font-family="'Press Start 2P', monospace" font-size="7" fill="#ff007f">XP MULTIPLIER: X2.5  |  CURRENT GUILD: FREELANCE / OPEN-SOURCE</text>
-  <text x="805" y="298" font-family="'Press Start 2P', monospace" font-size="7" fill="#39ff14" text-anchor="end">READY TO ENCOUNTER NEW QUESTS</text>
+  <!-- Ground Terrain decoration at the bottom -->
+  <g transform="translate(0, 295)">
+    <rect width="850" height="6" class="ground-top"/>
+    <rect y="6" width="850" height="19" class="ground-side"/>
+    <!-- Grid pattern overlay -->
+    <path d="M 0 6 L 850 6 M 0 14 L 850 14" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+    <path d="M 20 0 v 25 M 40 0 v 25 M 60 0 v 25 M 80 0 v 25 M 100 0 v 25 M 120 0 v 25 M 140 0 v 25 M 160 0 v 25 M 180 0 v 25 M 200 0 v 25 M 220 0 v 25 M 240 0 v 25 M 260 0 v 25 M 280 0 v 25 M 300 0 v 25 M 320 0 v 25 M 340 0 v 25 M 360 0 v 25 M 380 0 v 25 M 400 0 v 25 M 420 0 v 25 M 440 0 v 25 M 460 0 v 25 M 480 0 v 25 M 500 0 v 25 M 520 0 v 25 M 540 0 v 25 M 560 0 v 25 M 580 0 v 25 M 600 0 v 25 M 620 0 v 25 M 640 0 v 25 M 660 0 v 25 M 680 0 v 25 M 700 0 v 25 M 720 0 v 25 M 740 0 v 25 M 760 0 v 25 M 780 0 v 25 M 800 0 v 25 M 820 0 v 25 M 840 0 v 25" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+  </g>
 </svg>

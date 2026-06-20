@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 360" width="100%">
+  <defs>
+    <style>
+      @font-face {
+      font-family: 'Press Start 2P';
+      src: url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      }
+      
+      .bg-sky { fill: #5c94fc; }
+      
+      .cloud { fill: #ffffff; }
+      
+      .dialogue-box {
+        fill: #fce4a0;
+        stroke: #000000;
+        stroke-width: 4;
+      }
+      
+      .dialogue-inner {
+        fill: none;
+        stroke: #b83c18;
+        stroke-width: 2;
+      }
+      
+      .text-prompt {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #b83c18;
+      }
+      
+      .text-label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #b83c18;
+        font-weight: bold;
+      }
+      
+      .text-val {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #000000;
+      }
+      
+      .text-val-green {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #00a800;
+      }
+      
+      /* Ground blocks at the bottom */
+      .ground-top { fill: #fc9838; }
+      .ground-side { fill: #b83c18; }
+      
+      /* NES Controller Graphics */
+      .ctrl-body { fill: #cccccc; stroke: #000000; stroke-width: 2; }
+      .ctrl-dark-rect { fill: #3e3e3e; }
+      .ctrl-button-red { fill: #e52521; stroke: #000000; stroke-width: 1.5; }
+      .ctrl-dpad { fill: #000000; }
+      .ctrl-label { font-family: 'Press Start 2P', monospace; font-size: 5px; fill: #e52521; }
+      .ctrl-action-pill { fill: #3e3e3e; }
+      
+      .cloud-bg-1 { animation: cloudDrift 50s infinite linear; }
+      .cloud-bg-2 { animation: cloudDrift 80s infinite linear -20s; }
+      
+      @keyframes cloudDrift {
+        0% { transform: translateX(850px); }
+        100% { transform: translateX(-200px); }
+      }
+    </style>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="850" height="360" class="bg-sky"/>
+
+  <!-- Clouds Background -->
+  <g class="cloud-bg-1" transform="translate(100, 10)">
+    <path d="M120,20 C110,20 100,28 100,38 C90,38 80,46 80,56 C80,66 90,74 100,74 L160,74 C170,74 180,66 180,56 C180,46 170,38 160,38 C160,28 150,20 140,20 Z" class="cloud" opacity="0.6"/>
+  </g>
+  <g class="cloud-bg-2" transform="translate(450, 20)">
+    <path d="M60,10 C55,10 50,14 50,19 C45,19 40,23 40,28 C40,33 45,37 50,37 L80,37 C85,37 90,33 90,28 C90,23 85,19 80,19 C80,14 75,10 70,10 Z" class="cloud" opacity="0.5"/>
+  </g>
+
+  <!-- Main Dialogue Box (Dialogue screen styled) -->
+  <rect x="35" y="30" width="780" height="275" rx="12" class="dialogue-box"/>
+  <rect x="42" y="37" width="766" height="261" rx="8" class="dialogue-inner"/>
+
+  <!-- LEFT: NES Controller Illustration -->
+  <g transform="translate(65, 125)">
+    <!-- Controller outline -->
+    <rect width="130" height="70" rx="8" class="ctrl-body"/>
+    <!-- Dark central panel -->
+    <rect x="10" y="10" width="110" height="50" rx="4" class="ctrl-dark-rect"/>
+    <!-- Red buttons A and B -->
+    <circle cx="90" cy="38" r="8" class="ctrl-button-red"/>
+    <text x="90" y="55" class="ctrl-label" text-anchor="middle">B</text>
+    <circle cx="110" cy="38" r="8" class="ctrl-button-red"/>
+    <text x="110" y="55" class="ctrl-label" text-anchor="middle">A</text>
+    <!-- D-Pad -->
+    <path d="M 22 28 h 10 v 10 h -10 z" class="ctrl-dpad"/>
+    <path d="M 27 23 h 10 v 10 h -10 z" class="ctrl-dpad"/>
+    <path d="M 32 28 h 10 v 10 h -10 z" class="ctrl-dpad"/>
+    <path d="M 27 33 h 10 v 10 h -10 z" class="ctrl-dpad"/>
+    <circle cx="32" cy="33" r="2" fill="#3e3e3e"/>
+    <!-- Select / Start button pills -->
+    <rect x="52" y="35" width="12" height="4" rx="2" class="ctrl-action-pill"/>
+    <rect x="68" y="35" width="12" height="4" rx="2" class="ctrl-action-pill"/>
+    <text x="58" y="46" font-family="'Press Start 2P'" font-size="4" fill="#ffffff" text-anchor="middle">SELECT</text>
+    <text x="74" y="46" font-family="'Press Start 2P'" font-size="4" fill="#ffffff" text-anchor="middle">START</text>
+  </g>
+
+  <!-- RIGHT: Terminal neofetch output -->
+  <g transform="translate(230, 50)">
+    <!-- Command Prompt -->
+    <text x="10" y="15" class="text-prompt">sujithputta02@terminal:~$ ./retro_boot.sh --status</text>
+    
+    <!-- Stats lines -->
+    <g transform="translate(10, 42)">
+      <!-- Line 1: OS -->
+      <text x="0" y="0" class="text-label">OS:<tspan class="text-val"> NES / Pixel Kingdom OS</tspan></text>
+      <!-- Line 2: Host -->
+      <text x="0" y="20" class="text-label">Host:<tspan class="text-val"> Developer &amp; AI Specialist</tspan></text>
+      <!-- Line 3: Kernel -->
+      <text x="0" y="40" class="text-label">Kernel:<tspan class="text-val"> Retro Game Engine v1.1</tspan></text>
+      <!-- Line 4: Uptime -->
+      <text x="0" y="60" class="text-label">Uptime:<tspan class="text-val"> Level 1-1 Cleared 🌟</tspan></text>
+      <!-- Line 5: Shell -->
+      <text x="0" y="80" class="text-label">Shell:<tspan class="text-val"> zsh / TypeScript / Python</tspan></text>
+      <!-- Line 6: Resolution -->
+      <text x="0" y="100" class="text-label">Resolution:<tspan class="text-val"> 8-bit Pixel Art</tspan></text>
+      <!-- Line 7: Editor -->
+      <text x="0" y="120" class="text-label">Editor:<tspan class="text-val"> VS Code / Cursor / Retro Paint</tspan></text>
+      <!-- Line 8: CPU -->
+      <text x="0" y="140" class="text-label">CPU:<tspan class="text-val"> NES Ricoh 2A03 (Neural Net-powered)</tspan></text>
+      <!-- Line 9: Memory -->
+      <text x="0" y="160" class="text-label">Memory:<tspan class="text-val"> 2KB Work RAM (Optimized for RAG)</tspan></text>
+      <!-- Line 10: Mission -->
+      <text x="0" y="180" class="text-label">Mission:<tspan class="text-val-green"> Defeating bugs &amp; carbon footprints</tspan></text>
+    </g>
+  </g>
+
+  <!-- Ground Terrain decoration at the bottom -->
+  <g transform="translate(0, 330)">
+    <rect width="850" height="6" class="ground-top"/>
+    <rect y="6" width="850" height="24" class="ground-side"/>
+    <!-- Grid pattern overlay for standard Mario ground texture block feel -->
+    <path d="M 0 6 L 850 6 M 0 14 L 850 14 M 0 22 L 850 22" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+    <path d="M 20 0 v 30 M 40 0 v 30 M 60 0 v 30 M 80 0 v 30 M 100 0 v 30 M 120 0 v 30 M 140 0 v 30 M 160 0 v 30 M 180 0 v 30 M 200 0 v 30 M 220 0 v 30 M 240 0 v 30 M 260 0 v 30 M 280 0 v 30 M 300 0 v 30 M 320 0 v 30 M 340 0 v 30 M 360 0 v 30 M 380 0 v 30 M 400 0 v 30 M 420 0 v 30 M 440 0 v 30 M 460 0 v 30 M 480 0 v 30 M 500 0 v 30 M 520 0 v 30 M 540 0 v 30 M 560 0 v 30 M 580 0 v 30 M 600 0 v 30 M 620 0 v 30 M 640 0 v 30 M 660 0 v 30 M 680 0 v 30 M 700 0 v 30 M 720 0 v 30 M 740 0 v 30 M 760 0 v 30 M 780 0 v 30 M 800 0 v 30 M 820 0 v 30 M 840 0 v 30" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+  </g>
+</svg>

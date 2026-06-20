@@ -45,3 +45,6 @@ next-env.d.ts
 /data
 *.db
 *.sqlite
+
+# temp folders
+sujithputta02_temp/

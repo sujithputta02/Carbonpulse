@@ -1,0 +1,31 @@
+name: Generate GitHub Stats
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+permissions:   # ← FIX 1: grant write access
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate Snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: sujithputta02
+          outputs: |
+            dist/snake-dark.svg?color_snake=#e52521&color_dots=#191f26,#00a800,#fc9838,#b83c18,#fcf800
+            dist/snake-light.svg?color_snake=#e52521&color_dots=#fce4a0,#00a800,#fc9838,#b83c18,#fcf800
+      - name: Fix file permissions
+        run: sudo chown -R $USER:$USER dist/
+      - name: Apply Super Mario Theme to SVGs
+        run: python scripts/theme_snake.py
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: output
+          build_dir: dist
+          keep_history: false    # ← FIX 2: avoids history conflicts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 320" width="100%">
+  <defs>
+    <style>
+      @font-face {
+      font-family: 'Press Start 2P';
+      src: url(data:font/woff2;charset=utf-8;base64,d09GMgABAAAAAAm4AAwAAAAAIowAAAlkAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCgGYACCdBEICq90o0cLgTYAATYCJAOBOgQgBYRKB4cLG9MaM6PCxgEBtM5K8H9OTuRa91oOAFXBgqthy3Bxdysl6eKShop3ZGEFYbIyElExTXWQUwNuYuRiEnNgWNveD3s/+iuTxAP/9+7+1rCOd8JEywIaCzdYHySRLKCpgUdbH4XR+vlx+Y6cj/+ImYhL7EYTKzOc5kaVpZWEDZOTIGT2Wv0+WilBmW6QYvydelmP5399rdv0kfCQcOWxM60dhuGLha+8rrvRFKoQ41FUjU5DL158MTuHlY30SQfMT7byI51h2yZjZViBWPmui8eY188ieQTY4ShW/omOyQACt6tpSiVbm/4zSi9uhKXjTABqhPj29k9zOunf7f9tS+/e5JQuj5SM7JSKwkqjoZmg1lDCzFJoAAoKAMgQB3CY/f3SFw/oPREoRoxIu1RpdlwfXztFBBQo1c/GNn9UEnDnz5pqgAmQAvwBUskwQxFAYrVpgZb91miQQ3QS0joHJpJm2WgnBMMRqG7jJSTDtDzAGpB4hZqrcM56UG+vwMEsxUejX12H4FGBMmQiVahSs1Gz1u06cebKg1f/9SpBgbZ5U8xJBSo0GOH5miUbjpy6dOvZ1/EIcnjh/K+jTtlzFsZ/6mrklPQCREmRp0iJDn0GzFgCSNEjMCAyIjEhM6OwR+WAxhGdEwZnTC5YXCVJxuGOy4MFT5a8WPFmzYcNW37s+PPFE4AvUIpUAkGEgomEEAuFhJEIJxVBJpJcFIVoSjFUYqnF0YinlUAnEZsbDMyfCdAB2AInkF0GuU0ASgBJAPyloCFAEEQFURAooIGhwUCiIFVYydRIokKvSkQc2p0LxMETFX2CajxQcskTs7r5Pq31zAtbSq3pxhm61Znmft1bpLyywQugrZ8k3FgtmpTdYAN4hWfZ3ZVb5rrkhVotmlWnbHMXuCGb3T91M6l2Qae9djPrUXIs9eIkaFQulzXbFrBrf/adw2yvR3QMqJjaIaxVNA1DGJDgHeIK8ZahQaMPqCgkF9HPwjDuUNWccArPR+13J9cXFEWFi2E6DBVB2CF2eDIWJr-------------/--yPD5WPRi+N/34v4n8f/6/y78rWMRW2WwK5WnryqX+hS6pLqcuuy6wLrgutS6gLqoOrA6pDqsOqw6sDqcOpxAnEwAAA==) format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      }
+      
+      .bg-sky { fill: #5c94fc; }
+      
+      .cloud { fill: #ffffff; }
+      
+      .text-title { 
+        font-family: 'Press Start 2P', monospace; 
+        font-size: 13px; 
+        fill: #ffffff; 
+        stroke: #000000;
+        stroke-width: 2.5;
+        paint-order: stroke fill;
+      }
+      
+      /* Dialogue Style Card Base */
+      .quest-card-bg {
+        fill: #fce4a0;
+        stroke: #000000;
+        stroke-width: 3;
+      }
+      
+      .quest-card-inner {
+        fill: none;
+        stroke: #b83c18;
+        stroke-width: 1.5;
+      }
+      
+      .text-quest-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        fill: #000000;
+        font-weight: bold;
+      }
+      
+      .text-meta-label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #b83c18;
+        font-weight: bold;
+      }
+      
+      .text-meta-val {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #000000;
+      }
+      
+      .text-desc {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #4a3728;
+      }
+      
+      /* Level Badge elements */
+      .badge-level {
+        fill: #fc9838;
+        stroke: #000000;
+        stroke-width: 2;
+      }
+      
+      .badge-text {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        fill: #000000;
+      }
+      
+      /* Ground blocks at the bottom */
+      .ground-top { fill: #fc9838; }
+      .ground-side { fill: #b83c18; }
+      
+      /* Coin Graphics */
+      .coin-gold { fill: #fcf800; stroke: #000000; stroke-width: 1.5; }
+      .coin-stripe { stroke: #fc9838; stroke-width: 1.5; }
+      
+      .cloud-bg-1 { animation: cloudDrift 60s infinite linear; }
+      .cloud-bg-2 { animation: cloudDrift 90s infinite linear -45s; }
+      
+      @keyframes cloudDrift {
+        0% { transform: translateX(850px); }
+        100% { transform: translateX(-200px); }
+      }
+    </style>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="850" height="320" class="bg-sky"/>
+
+  <!-- Clouds Background -->
+  <g class="cloud-bg-1" transform="translate(50, 15)">
+    <path d="M120,20 C110,20 100,28 100,38 C90,38 80,46 80,56 C80,66 90,74 100,74 L160,74 C170,74 180,66 180,56 C180,46 170,38 160,38 C160,28 150,20 140,20 Z" class="cloud" opacity="0.6"/>
+  </g>
+  <g class="cloud-bg-2" transform="translate(600, 25)">
+    <path d="M60,10 C55,10 50,14 50,19 C45,19 40,23 40,28 C40,33 45,37 50,37 L80,37 C85,37 90,33 90,28 C90,23 85,19 80,19 C80,14 75,10 70,10 Z" class="cloud" opacity="0.5"/>
+  </g>
+
+  <!-- Screen Title -->
+  <text x="425" y="32" class="text-title" text-anchor="middle">> CURRENT ADVENTURE QUESTS &lt;</text>
+
+  <!-- QUEST 1: CarbonPulse (LEVEL 1-2) -->
+  <g transform="translate(0, 5) ">
+    <!-- Card Dialogue Box -->
+    <rect x="35" y="45" width="780" height="72" rx="10" class="quest-card-bg"/>
+    <rect x="41" y="51" width="768" height="60" rx="6" class="quest-card-inner"/>
+    <!-- Level Badge (looks like a brick item) -->
+    <rect x="52" y="58" width="80" height="18" rx="3" class="badge-level"/>
+    <text x="92" y="71" class="badge-text" text-anchor="middle">LV 1-2</text>
+    <!-- Quest Name -->
+    <text x="145" y="71" class="text-quest-title">CarbonPulse 🟢💨</text>
+    <!-- Difficulty -->
+    <text x="460" y="71" class="text-meta-label">DIFF:<tspan class="text-meta-val" fill="#00a800"> ELITE</tspan></text>
+    <!-- Reward Coin + Text -->
+    <g transform="translate(640, 58)">
+      <ellipse cx="8" cy="11" rx="5" ry="8" class="coin-gold"/>
+      <line x1="8" y1="6" x2="8" y2="16" class="coin-stripe"/>
+      <text x="18" y="14" class="text-meta-label" fill="#b83c18">+5000 PTS</text>
+    </g>
+    <!-- Objective -->
+    <text x="52" y="98" class="text-desc">> OBJ: AI Carbon footprints tracker and micro-recommendation engine.</text>
+  </g>
+
+  <!-- QUEST 2: Secure Offline RAG (LEVEL 1-3) -->
+  <g transform="translate(0, 5) ">
+    <!-- Card Dialogue Box -->
+    <rect x="35" y="127" width="780" height="72" rx="10" class="quest-card-bg"/>
+    <rect x="41" y="133" width="768" height="60" rx="6" class="quest-card-inner"/>
+    <!-- Level Badge -->
+    <rect x="52" y="140" width="80" height="18" rx="3" class="badge-level"/>
+    <text x="92" y="153" class="badge-text" text-anchor="middle">LV 1-3</text>
+    <!-- Quest Name -->
+    <text x="145" y="153" class="text-quest-title">Secure Offline RAG 🧠🔐</text>
+    <!-- Difficulty -->
+    <text x="460" y="153" class="text-meta-label">DIFF:<tspan class="text-meta-val" fill="#e52521"> LEGENDARY</tspan></text>
+    <!-- Reward Coin + Text -->
+    <g transform="translate(640, 140)">
+      <ellipse cx="8" cy="11" rx="5" ry="8" class="coin-gold"/>
+      <line x1="8" y1="6" x2="8" y2="16" class="coin-stripe"/>
+      <text x="18" y="14" class="text-meta-label" fill="#b83c18">+8500 PTS</text>
+    </g>
+    <!-- Objective -->
+    <text x="52" y="180" class="text-desc">> OBJ: Zero-network data ingestion &amp; query system using local LLMs.</text>
+  </g>
+
+  <!-- QUEST 3: DineInGo-App (LEVEL 1-4) -->
+  <g transform="translate(0, 5) ">
+    <!-- Card Dialogue Box -->
+    <rect x="35" y="209" width="780" height="72" rx="10" class="quest-card-bg"/>
+    <rect x="41" y="215" width="768" height="60" rx="6" class="quest-card-inner"/>
+    <!-- Level Badge -->
+    <rect x="52" y="222" width="80" height="18" rx="3" class="badge-level"/>
+    <text x="92" y="235" class="badge-text" text-anchor="middle">LV 1-4</text>
+    <!-- Quest Name -->
+    <text x="145" y="235" class="text-quest-title">DineInGo-App 🍔⚡</text>
+    <!-- Difficulty -->
+    <text x="460" y="235" class="text-meta-label">DIFF:<tspan class="text-meta-val" fill="#fc9838"> HARD</tspan></text>
+    <!-- Reward Coin + Text -->
+    <g transform="translate(640, 222)">
+      <ellipse cx="8" cy="11" rx="5" ry="8" class="coin-gold"/>
+      <line x1="8" y1="6" x2="8" y2="16" class="coin-stripe"/>
+      <text x="18" y="14" class="text-meta-label" fill="#b83c18">+4000 PTS</text>
+    </g>
+    <!-- Objective -->
+    <text x="52" y="262" class="text-desc">> OBJ: Real-time queue and high-performance ordering systems.</text>
+  </g>
+
+  <!-- Ground Terrain decoration at the bottom -->
+  <g transform="translate(0, 295)">
+    <rect width="850" height="6" class="ground-top"/>
+    <rect y="6" width="850" height="19" class="ground-side"/>
+    <!-- Grid pattern overlay -->
+    <path d="M 0 6 L 850 6 M 0 14 L 850 14" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+    <path d="M 20 0 v 25 M 40 0 v 25 M 60 0 v 25 M 80 0 v 25 M 100 0 v 25 M 120 0 v 25 M 140 0 v 25 M 160 0 v 25 M 180 0 v 25 M 200 0 v 25 M 220 0 v 25 M 240 0 v 25 M 260 0 v 25 M 280 0 v 25 M 300 0 v 25 M 320 0 v 25 M 340 0 v 25 M 360 0 v 25 M 380 0 v 25 M 400 0 v 25 M 420 0 v 25 M 440 0 v 25 M 460 0 v 25 M 480 0 v 25 M 500 0 v 25 M 520 0 v 25 M 540 0 v 25 M 560 0 v 25 M 580 0 v 25 M 600 0 v 25 M 620 0 v 25 M 640 0 v 25 M 660 0 v 25 M 680 0 v 25 M 700 0 v 25 M 720 0 v 25 M 740 0 v 25 M 760 0 v 25 M 780 0 v 25 M 800 0 v 25 M 820 0 v 25 M 840 0 v 25" stroke="#000" stroke-width="1" stroke-opacity="0.3"/>
+  </g>
+</svg>

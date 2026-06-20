@@ -1,159 +1,258 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 260" width="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 280" width="100%">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+      @font-face {
+      font-family: 'Press Start 2P';
+      src: url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
       
-      .bg-rect {
-        fill: #06090e;
+      .bg-sky { fill: #5c94fc; }
+      
+      /* Retro Text HUD */
+      .hud-label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        fill: #ffffff;
       }
-      .grid-path {
-        fill: none;
-        stroke: #161b22;
-        stroke-width: 1;
+      .hud-value {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
+        fill: #ffffff;
       }
-      .horizon-grid {
-        fill: none;
-        stroke: #00f0ff;
-        stroke-width: 1.5;
-        stroke-opacity: 0.25;
-      }
-      .glow-border {
-        fill: none;
-        stroke: url(#border-gradient);
-        stroke-width: 3;
-        filter: url(#glow);
-        animation: borderPulse 4s infinite ease-in-out;
-      }
-      .terminal-header {
-        fill: #0d1117;
-      }
+      
+      /* Ground block pattern */
+      .ground-top { fill: #fc9838; }
+      .ground-side { fill: #b83c18; }
+      .ground-shadow { fill: #000000; opacity: 0.3; }
+      
+      /* Clouds and Bushes */
+      .cloud { fill: #ffffff; }
+      .bush-dark { fill: #008000; }
+      .bush-light { fill: #00a800; }
+      
+      /* Bricks and Question Blocks */
+      .brick-base { fill: #b83c18; stroke: #000000; stroke-width: 1.5; }
+      .brick-line { fill: none; stroke: #000000; stroke-width: 1.5; }
+      
+      .q-block { fill: #fc9838; stroke: #000000; stroke-width: 1.5; animation: qBlockPulse 1s infinite steps(4); }
+      .q-text { font-family: 'Press Start 2P', monospace; font-size: 12px; fill: #ffffff; font-weight: bold; }
+      
+      /* Title text in colorful retro logo style */
       .title-text {
         font-family: 'Press Start 2P', monospace;
-        font-size: 32px;
-        fill: #39ff14;
-        filter: url(#glow);
-        text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
-        animation: textFlicker 6s infinite;
+        font-size: 30px;
       }
+      
+      .letter-bounce {
+        display: inline-block;
+        animation: letterBob 2s infinite ease-in-out;
+      }
+      
       .subtitle-text {
         font-family: 'Press Start 2P', monospace;
-        font-size: 11px;
-        fill: #00f0ff;
+        font-size: 10px;
+        fill: #ffffff;
         letter-spacing: 1px;
-        filter: url(#glow-blue);
-      }
-      .terminal-info {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
-        fill: #8b9bb4;
-      }
-      .status-active {
-        fill: #39ff14;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
-        filter: url(#glow);
-        animation: activePulse 2s infinite ease-in-out;
-      }
-      .scanline {
-        fill: none;
-        stroke: #000000;
-        stroke-width: 1;
-        stroke-opacity: 0.15;
-        animation: scanlineScroll 12s linear infinite;
-      }
-      .window-btn-close { fill: #ff5f56; }
-      .window-btn-min { fill: #ffbd2e; }
-      .window-btn-max { fill: #27c93f; }
-      
-      .cursor-blink {
-        animation: cursorBlink 1s infinite;
-      }
-
-      /* Animations */
-      @keyframes cursorBlink {
-        0%, 49% { opacity: 1; }
-        50%, 100% { opacity: 0; }
       }
       
-      @keyframes activePulse {
-        0%, 100% { opacity: 0.6; }
-        50% { opacity: 1; filter: drop-shadow(0 0 4px #39ff14); }
+      /* Characters */
+      .hero-character {
+        animation: heroRunAndJump 10s infinite linear;
+      }
+      .minion-character {
+        animation: minionWalk 10s infinite linear;
+      }
+      .coin-item {
+        animation: coinPop 10s infinite linear;
+      }
+      
+      /* Cloud scrolling */
+      .cloud-bg-1 { animation: cloudDrift 60s infinite linear; }
+      .cloud-bg-2 { animation: cloudDrift 90s infinite linear -30s; }
+
+      /* Keyframe Animations */
+      @keyframes qBlockPulse {
+        0%, 100% { fill: #fc9838; }
+        50% { fill: #e45c10; }
+      }
+      
+      @keyframes cloudDrift {
+        0% { transform: translateX(850px); }
+        100% { transform: translateX(-200px); }
       }
 
-      @keyframes borderPulse {
-        0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 2px #00f0ff); }
-        50% { opacity: 1; filter: drop-shadow(0 0 8px #39ff14); }
+      @keyframes letterBob {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
       }
 
-      @keyframes textFlicker {
-        0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 0.99; filter: drop-shadow(0 0 6px #39ff14); }
-        20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.92; filter: drop-shadow(0 0 2px #39ff14); }
+      @keyframes heroRunAndJump {
+        /* Spawn and run left-to-right */
+        0% { transform: translate(-40px, 192px) scaleX(1); }
+        28% { transform: translate(320px, 192px) scaleX(1); }
+        /* Jump to hit the first question block */
+        31% { transform: translate(380px, 130px) scaleX(1); }
+        34% { transform: translate(430px, 192px) scaleX(1); }
+        /* Run towards Minion */
+        46% { transform: translate(550px, 192px) scaleX(1); }
+        /* Jump over Minion */
+        49% { transform: translate(610px, 110px) scaleX(1); }
+        52% { transform: translate(670px, 192px) scaleX(1); }
+        /* Run off screen right */
+        60% { transform: translate(900px, 192px) scaleX(1); }
+        61% { transform: translate(900px, 192px) scaleX(-1); }
+        /* Run back right-to-left */
+        62% { transform: translate(850px, 192px) scaleX(-1); }
+        98% { transform: translate(-40px, 192px) scaleX(-1); }
+        100% { transform: translate(-40px, 192px) scaleX(1); }
+      }
+
+      @keyframes minionWalk {
+        0% { transform: translate(880px, 200px) scaleX(1); }
+        30% { transform: translate(580px, 200px) scaleX(1); }
+        /* Hero jumps over Minion here */
+        60% { transform: translate(280px, 200px) scaleX(1); }
+        90% { transform: translate(-50px, 200px) scaleX(1); }
+        91% { transform: translate(-50px, 200px) scaleX(-1); }
+        100% { transform: translate(880px, 200px) scaleX(-1); }
+      }
+
+      @keyframes coinPop {
+        0%, 30.5% { transform: translate(394px, 140px); opacity: 0; }
+        31% { transform: translate(394px, 80px); opacity: 1; }
+        33%, 100% { transform: translate(394px, 140px); opacity: 0; }
       }
     </style>
-    
-    <!-- Glow Filters -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    
-    <!-- Linear Gradient for Border -->
-    <linearGradient id="border-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#39ff14"/>
-      <stop offset="50%" stop-color="#00f0ff"/>
-      <stop offset="100%" stop-color="#ff007f"/>
-    </linearGradient>
-    
-    <!-- Grid Pattern -->
-    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-      <path d="M 20 0 L 0 0 0 20" class="grid-path"/>
-    </pattern>
   </defs>
 
-  <!-- CRT Window Base -->
-  <rect width="850" height="260" rx="10" class="bg-rect"/>
-  <rect width="850" height="260" rx="10" fill="url(#grid)"/>
+  <!-- Sky Background -->
+  <rect width="850" height="280" class="bg-sky"/>
 
-  <!-- Horizon Perspective Grid (Cyberpunk Synthwave feel) -->
-  <path d="M 0 170 L 850 170 M 0 180 L 850 180 M 0 195 L 850 195 M 0 215 L 850 215 M 0 240 L 850 240" class="horizon-grid"/>
-  <path d="M 85 170 L 0 260 M 212 170 L 100 260 M 340 170 L 280 260 M 425 170 L 425 260 M 510 170 L 570 260 M 637 170 L 750 260 M 765 170 L 850 260" class="horizon-grid"/>
+  <!-- Clouds -->
+  <g class="cloud-bg-1" transform="translate(100, 40)">
+    <path d="M120,20 C110,20 100,28 100,38 C90,38 80,46 80,56 C80,66 90,74 100,74 L160,74 C170,74 180,66 180,56 C180,46 170,38 160,38 C160,28 150,20 140,20 Z" class="cloud" opacity="0.8"/>
+  </g>
+  <g class="cloud-bg-2" transform="translate(500, 60)">
+    <path d="M60,10 C55,10 50,14 50,19 C45,19 40,23 40,28 C40,33 45,37 50,37 L80,37 C85,37 90,33 90,28 C90,23 85,19 80,19 C80,14 75,10 70,10 Z" class="cloud" opacity="0.6"/>
+  </g>
 
-  <!-- Glowing Outer Frame -->
-  <rect x="5" y="5" width="840" height="250" rx="8" class="glow-border"/>
+  <!-- HUD Stats Selection -->
+  <text x="50" y="30" class="hud-label">SUJITH</text>
+  <text x="50" y="45" class="hud-value">000641</text>
 
-  <!-- Window Header / Title Bar -->
-  <path d="M 5 5 L 845 5 L 845 35 L 5 35 Z" fill="#0d1117"/>
-  <circle cx="25" cy="20" r="6" class="window-btn-close"/>
-  <circle cx="45" cy="20" r="6" class="window-btn-min"/>
-  <circle cx="65" cy="20" r="6" class="window-btn-max"/>
+  <text x="280" y="30" class="hud-label">COINS</text>
+  <text x="280" y="45" class="hud-value">x06</text>
+
+  <text x="510" y="30" class="hud-label">WORLD</text>
+  <text x="510" y="45" class="hud-value">1-1</text>
+
+  <text x="730" y="30" class="hud-label">TIME</text>
+  <text x="730" y="45" class="hud-value">2026</text>
+
+  <!-- Main Colorful Animated Retro-style Title -->
+  <text x="425" y="102" class="title-text" text-anchor="middle" stroke="#000000" stroke-width="4" paint-order="stroke fill" font-weight="bold">
+    <tspan class="letter-bounce" fill="#e52521">S</tspan>
+    <tspan class="letter-bounce" fill="#f2a900" style="animation-delay: 0.1s">U</tspan>
+    <tspan class="letter-bounce" fill="#002fbe" style="animation-delay: 0.2s">J</tspan>
+    <tspan class="letter-bounce" fill="#43b047" style="animation-delay: 0.3s">I</tspan>
+    <tspan class="letter-bounce" fill="#e52521" style="animation-delay: 0.4s">T</tspan>
+    <tspan class="letter-bounce" fill="#f2a900" style="animation-delay: 0.5s">H</tspan>
+    <tspan class="letter-bounce"> </tspan>
+    <tspan class="letter-bounce" fill="#002fbe" style="animation-delay: 0.6s">P</tspan>
+    <tspan class="letter-bounce" fill="#43b047" style="animation-delay: 0.7s">U</tspan>
+    <tspan class="letter-bounce" fill="#e52521" style="animation-delay: 0.8s">T</tspan>
+    <tspan class="letter-bounce" fill="#f2a900" style="animation-delay: 0.9s">T</tspan>
+    <tspan class="letter-bounce" fill="#002fbe" style="animation-delay: 1.0s">A</tspan>
+  </text>
   
-  <text x="425" y="24" font-family="'Press Start 2P', monospace" font-size="10" fill="#8b9bb4" text-anchor="middle">> SUJITH@CRT-PORTAL: ~</text>
+  <text x="425" y="125" class="subtitle-text" text-anchor="middle" stroke="#000000" stroke-width="2.5" paint-order="stroke fill">> FULL-STACK DEVELOPER &amp; AI SPECIALIST &lt;</text>
 
-  <!-- Scanlines (CRT simulation) -->
-  <path d="M 0 10 L 850 10 M 0 20 L 850 20 M 0 30 L 850 30 M 0 40 L 850 40 M 0 50 L 850 50 M 0 60 L 850 60 M 0 70 L 850 70 M 0 80 L 850 80 M 0 90 L 850 90 M 0 100 L 850 100 M 0 110 L 850 110 M 0 120 L 850 120 M 0 130 L 850 130 M 0 140 L 850 140 M 0 150 L 850 150 M 0 160 L 850 160 M 0 170 L 850 170 M 0 180 L 850 180 M 0 190 L 850 190 M 0 200 L 850 200 M 0 210 L 850 210 M 0 220 L 850 220 M 0 230 L 850 230 M 0 240 L 850 240 M 0 250 L 850 250" class="scanline"/>
+  <!-- Level Bricks & Pipes -->
+  <!-- Green Pipe -->
+  <g transform="translate(150, 160)">
+    <rect x="0" y="20" width="48" height="60" fill="#00a800" stroke="#000" stroke-width="2"/>
+    <rect x="-4" y="0" width="56" height="20" fill="#00f800" stroke="#000" stroke-width="2"/>
+    <!-- Highlights -->
+    <rect x="6" y="20" width="6" height="60" fill="#00f800"/>
+    <rect x="2" y="2" width="6" height="16" fill="#ffffff"/>
+  </g>
 
-  <!-- Left Stats Info -->
-  <text x="25" y="75" class="terminal-info">SYS.STATUS: </text>
-  <text x="135" y="75" class="status-active">ONLINE</text>
-  <text x="25" y="95" class="terminal-info">LOC: IN/HYBRID</text>
-  <text x="25" y="115" class="terminal-info">BITRATE: 8-BIT</text>
+  <!-- Floating Bricks & Question Block -->
+  <!-- Brick 1 -->
+  <g transform="translate(350, 130)">
+    <rect width="32" height="32" class="brick-base"/>
+    <line x1="0" y1="10" x2="32" y2="10" class="brick-line"/>
+    <line x1="0" y1="21" x2="32" y2="21" class="brick-line"/>
+    <line x1="10" y1="0" x2="10" y2="10" class="brick-line"/>
+    <line x1="22" y1="0" x2="22" y2="10" class="brick-line"/>
+    <line x1="5" y1="10" x2="5" y2="21" class="brick-line"/>
+    <line x1="16" y1="10" x2="16" y2="21" class="brick-line"/>
+    <line x1="27" y1="10" x2="27" y2="21" class="brick-line"/>
+  </g>
+  <!-- Question Block -->
+  <g transform="translate(382, 130)" class="q-block-container">
+    <rect width="32" height="32" class="q-block"/>
+    <text x="16" y="22" class="q-text" text-anchor="middle">?</text>
+    <circle cx="5" cy="5" r="1" fill="#000000"/>
+    <circle cx="27" cy="5" r="1" fill="#000000"/>
+    <circle cx="5" cy="27" r="1" fill="#000000"/>
+    <circle cx="27" cy="27" r="1" fill="#000000"/>
+  </g>
+  <!-- Brick 2 -->
+  <g transform="translate(414, 130)">
+    <rect width="32" height="32" class="brick-base"/>
+    <line x1="0" y1="10" x2="32" y2="10" class="brick-line"/>
+    <line x1="0" y1="21" x2="32" y2="21" class="brick-line"/>
+    <line x1="10" y1="0" x2="10" y2="10" class="brick-line"/>
+    <line x1="22" y1="0" x2="22" y2="10" class="brick-line"/>
+    <line x1="5" y1="10" x2="5" y2="21" class="brick-line"/>
+    <line x1="16" y1="10" x2="16" y2="21" class="brick-line"/>
+    <line x1="27" y1="10" x2="27" y2="21" class="brick-line"/>
+  </g>
 
-  <!-- Main Name Title -->
-  <text x="425" y="105" class="title-text" text-anchor="middle">SUJITH PUTTA</text>
-  
-  <!-- Subtitle -->
-  <text x="425" y="145" class="subtitle-text" text-anchor="middle">&gt; FULL-STACK DEVELOPER &amp; AI SPECIALIST &lt;</text>
+  <!-- Jumping Coin Item -->
+  <g class="coin-item">
+    <ellipse cx="10" cy="15" rx="5" ry="10" fill="#fcf800" stroke="#000" stroke-width="1.5"/>
+    <line x1="10" y1="9" x2="10" y2="21" stroke="#fc9838" stroke-width="1.5"/>
+  </g>
 
-  <!-- Right Stats Info -->
-  <text x="825" y="75" class="terminal-info" text-anchor="end">LEVEL: 99</text>
-  <text x="825" y="95" class="terminal-info" text-anchor="end">XP: 25.6K</text>
-  <text x="825" y="115" class="terminal-info" text-anchor="end">PORT: 2026</text>
+  <!-- Minion Character -->
+  <g class="minion-character">
+    <path d="M 6 16 C 6 4, 26 4, 26 16 Z" fill="#a85400" stroke="#000" stroke-width="1.5"/>
+    <path d="M 10 16 L 22 16 L 22 22 L 10 22 Z" fill="#fce4a0" stroke="#000" stroke-width="1.5"/>
+    <ellipse cx="9" cy="22" rx="4" ry="3" fill="#000000"/>
+    <ellipse cx="23" cy="22" rx="4" ry="3" fill="#000000"/>
+    <rect x="12" y="9" width="2" height="5" fill="#000"/>
+    <rect x="18" y="9" width="2" height="5" fill="#000"/>
+  </g>
 
-  <!-- Blinking Cursor Prompt Simulation at Bottom -->
-  <rect x="235" y="210" width="380" height="25" fill="#0d1117" rx="4" stroke="#00f0ff" stroke-opacity="0.3"/>
-  <text x="245" y="226" font-family="'Press Start 2P', monospace" font-size="7" fill="#39ff14">&gt; npm run dev --retro_mode<tspan class="cursor-blink">_</tspan></text>
+  <!-- Hero Character -->
+  <g class="hero-character">
+    <path d="M 6 0 h 12 v 4 h -12 Z" fill="#ff0000"/>
+    <path d="M 4 2 h 18 v 2 h -18 Z" fill="#ff0000"/>
+    <path d="M 6 4 h 6 v 2 h -6 Z" fill="#a85400"/>
+    <path d="M 12 4 h 6 v 2 h -6 Z" fill="#ffcca0"/>
+    <rect x="18" y="4" width="2" height="4" fill="#000000"/>
+    <path d="M 6 6 h 2 v 4 h -2 Z" fill="#a85400"/>
+    <path d="M 8 6 h 12 v 6 h -12 Z" fill="#ffcca0"/>
+    <path d="M 14 10 h 6 v 2 h -6 Z" fill="#a85400"/>
+    <path d="M 4 12 h 16 v 10 h -16 Z" fill="#ff0000"/>
+    <path d="M 8 12 h 8 v 12 h -8 Z" fill="#0000d8"/>
+    <circle cx="10" cy="18" r="1.5" fill="#fcf800"/>
+    <circle cx="14" cy="18" r="1.5" fill="#fcf800"/>
+    <circle cx="2" cy="17" r="3" fill="#ffcca0" stroke="#000000" stroke-width="1"/>
+    <circle cx="22" cy="17" r="3" fill="#ffcca0" stroke="#000000" stroke-width="1"/>
+    <rect x="6" y="24" width="5" height="6" fill="#a85400" stroke="#000" stroke-width="1.5"/>
+    <rect x="13" y="24" width="5" height="6" fill="#a85400" stroke="#000" stroke-width="1.5"/>
+  </g>
+
+  <!-- Ground Terrain -->
+  <g transform="translate(0, 240)">
+    <path d="M 0 0 h 850 v 8 h -850 Z" class="ground-top"/>
+    <path d="M 0 8 h 850 v 32 h -850 Z" class="ground-side"/>
+    <path d="M 0 8 L 850 8 M 0 18 L 850 18 M 0 28 L 850 28 M 0 38 L 850 38" stroke="#000" stroke-width="1" stroke-opacity="0.4"/>
+    <path d="M 20 8 v 32 M 40 8 v 32 M 60 8 v 32 M 80 8 v 32 M 100 8 v 32 M 120 8 v 32 M 140 8 v 32 M 160 8 v 32 M 180 8 v 32 M 200 8 v 32 M 220 8 v 32 M 240 8 v 32 M 260 8 v 32 M 280 8 v 32 M 300 8 v 32 M 320 8 v 32 M 340 8 v 32 M 360 8 v 32 M 380 8 v 32 M 400 8 v 32 M 420 8 v 32 M 440 8 v 32 M 460 8 v 32 M 480 8 v 32 M 500 8 v 32 M 520 8 v 32 M 540 8 v 32 M 560 8 v 32 M 580 8 v 32 M 600 8 v 32 M 620 8 v 32 M 640 8 v 32 M 660 8 v 32 M 680 8 v 32 M 700 8 v 32 M 720 8 v 32 M 740 8 v 32 M 760 8 v 32 M 780 8 v 32 M 800 8 v 32 M 820 8 v 32 M 840 8 v 32" stroke="#000" stroke-width="1" stroke-opacity="0.4"/>
+  </g>
 </svg>
