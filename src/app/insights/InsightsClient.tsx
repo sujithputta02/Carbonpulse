@@ -128,7 +128,7 @@ export default function InsightsClient({
       <div className="glass-panel rounded-2xl p-4 sm:p-5 border-white/5 bg-slate-950/20 text-xs text-gray-400 flex items-start space-x-3 leading-relaxed">
         <Info className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
         <div>
-          <h4 className="font-semibold text-white mb-1">How are actions ranked?</h4>
+          <h2 className="font-semibold text-white mb-1">How are actions ranked?</h2>
           <p>
             CarbonPulse uses a rule-based weighted heuristics scoring model: 
             <strong className="text-gray-300"> Score = (Highest Emission Category Match * 4.0) + (Budget Compatibility * 3.0) + (Goal Preference * 3.0) + (Ease level * 0.1)</strong>. 
