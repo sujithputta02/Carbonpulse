@@ -78,7 +78,9 @@ export function useFormStorage<T>({
   // Set form data with auto-save
   const setFormData = useCallback(
     (newData: T | ((prev: T) => T)) => {
-      const updated = typeof newData === "function" ? newData(formData) : newData;
+      const updated = typeof newData === "function"
+        ? (newData as (prev: T) => T)(formData)
+        : newData;
 
       setFormDataState(updated);
 

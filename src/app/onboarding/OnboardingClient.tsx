@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { saveProfile } from "../actions";
 import { ArrowLeft, ArrowRight, Leaf, Loader2 } from "lucide-react";
 import { onboardingSchema } from "@/lib/validation/onboardingSchema";
+import { onboardingDraftSchema } from "@/lib/validation/storageSchemas";
 import { UserProfile } from "@/types/user";
+import { useFormStorage } from "@/hooks/useFormStorage";
+import { logError, getErrorMessage } from "@/lib/clientErrors";
+import AccessibleDialog from "@/components/AccessibleDialog";
 
 import PersonalStep from "@/features/onboarding/components/PersonalStep";
 import TransitStep from "@/features/onboarding/components/TransitStep";
@@ -44,148 +48,143 @@ const DEFAULT_STATE: FormState = {
 export default function OnboardingClient() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormState>(DEFAULT_STATE);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  // 1. Load draft from localStorage on mount
-  useEffect(() => {
+  // Use form storage hook for automatic localStorage persistence
+  const {
+    formData,
+    updateField,
+    clearStorage,
+    errors: formErrors,
+    getErrorMessage: getFieldError,
+  } = useFormStorage<FormState>({
+    storageKey: "carbonpulse_onboarding_draft",
+    defaultValue: DEFAULT_STATE,
+    schema: onboardingDraftSchema,
+  });
+
+  /**
+   * Validate current step with Zod schema
+   */
+  const validateStep = useCallback((): boolean => {
     try {
-      const savedDraft = localStorage.getItem("carbonpulse_onboarding_draft");
-      if (savedDraft) {
-        setFormData(JSON.parse(savedDraft));
+      if (step === 1) {
+        onboardingSchema.pick({
+          name: true,
+          location: true,
+          householdSize: true,
+          budgetSensitivity: true,
+        }).parse(formData);
+      } else if (step === 2) {
+        onboardingSchema.pick({
+          commuteType: true,
+          commuteDistanceWeekly: true,
+        }).parse(formData);
+      } else if (step === 4) {
+        onboardingSchema.pick({
+          electricityMonthlyKwh: true,
+          naturalGasMonthlyKwh: true,
+          shoppingPattern: true,
+        }).parse(formData);
       }
-    } catch (e) {
-      console.error("Failed to load onboarding draft", e);
+      return true;
+    } catch (error) {
+      logError(`Validation failed at step ${step}`, error, { step });
+      return false;
     }
-  }, []);
+  }, [step, formData]);
 
-  // 2. Save draft helper
-  const updateField = (fields: Partial<FormState>) => {
-    setFormData((prev) => {
-      const next = { ...prev, ...fields };
-      try {
-        localStorage.setItem("carbonpulse_onboarding_draft", JSON.stringify(next));
-      } catch (e) {
-        console.error("Failed to save onboarding draft", e);
-      }
-      return next;
-    });
-
-    // Clear specific errors
-    const updatedKeys = Object.keys(fields);
-    if (updatedKeys.length > 0) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        updatedKeys.forEach((k) => delete next[k]);
-        return next;
-      });
-    }
-  };
-
-  // Zod validation per step
-  const validateStep = (): boolean => {
-    const stepErrors: Record<string, string> = {};
-
-    if (step === 1) {
-      const personalResult = onboardingSchema.pick({
-        name: true,
-        location: true,
-        householdSize: true,
-        budgetSensitivity: true,
-      }).safeParse(formData);
-
-      if (!personalResult.success) {
-        personalResult.error.issues.forEach((err) => {
-          if (err.path[0]) stepErrors[err.path[0] as string] = err.message;
-        });
-      }
-    } else if (step === 2) {
-      const transitResult = onboardingSchema.pick({
-        commuteType: true,
-        commuteDistanceWeekly: true,
-      }).safeParse(formData);
-
-      if (!transitResult.success) {
-        transitResult.error.issues.forEach((err) => {
-          if (err.path[0]) stepErrors[err.path[0] as string] = err.message;
-        });
-      }
-    } else if (step === 4) {
-      const energyResult = onboardingSchema.pick({
-        electricityMonthlyKwh: true,
-        naturalGasMonthlyKwh: true,
-        shoppingPattern: true,
-      }).safeParse(formData);
-
-      if (!energyResult.success) {
-        energyResult.error.issues.forEach((err) => {
-          if (err.path[0]) stepErrors[err.path[0] as string] = err.message;
-        });
-      }
-    }
-
-    setErrors(stepErrors);
-    return Object.keys(stepErrors).length === 0;
-  };
-
-  const handleNext = () => {
+  /**
+   * Handle next step with validation
+   */
+  const handleNext = useCallback(() => {
     if (validateStep()) {
       setStep((prev) => Math.min(prev + 1, 5));
     }
-  };
+  }, [validateStep]);
 
-  const handleBack = () => {
+  /**
+   * Handle previous step
+   */
+  const handleBack = useCallback(() => {
     setStep((prev) => Math.max(prev - 1, 1));
-  };
+  }, []);
 
-  const handleGoalToggle = (goal: string) => {
-    const active = formData.goals.includes(goal);
-    const updatedGoals = active
-      ? formData.goals.filter((g) => g !== goal)
-      : [...formData.goals, goal];
-    updateField({ goals: updatedGoals });
-  };
+  /**
+   * Handle goal toggle
+   */
+  const handleGoalToggle = useCallback((goal: string) => {
+    updateField({
+      goals: formData.goals.includes(goal)
+        ? formData.goals.filter((g) => g !== goal)
+        : [...formData.goals, goal],
+    });
+  }, [formData.goals, updateField]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateStep()) return;
+  /**
+   * Handle form submission with full validation
+   */
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    // Validate the full schema on final submit
-    const finalResult = onboardingSchema.safeParse(formData);
-    if (!finalResult.success) {
-      const finalErrors: Record<string, string> = {};
-      finalResult.error.issues.forEach((err) => {
-        if (err.path[0]) finalErrors[err.path[0] as string] = err.message;
-      });
-      setErrors(finalErrors);
-      return;
-    }
+      if (!validateStep()) return;
 
-    setLoading(true);
-    try {
-      await saveProfile(formData);
-      localStorage.removeItem("carbonpulse_onboarding_draft");
-      router.push("/dashboard");
-    } catch (err) {
-      console.error(err);
-      setErrors({ submit: "Failed to save profile. Please try again." });
-      setLoading(false);
-    }
-  };
+      // Validate full schema on final submit
+      try {
+        onboardingSchema.parse(formData);
+      } catch (error) {
+        logError("Final validation failed", error, { formData });
+        return;
+      }
+
+      setLoading(true);
+      try {
+        await saveProfile(formData);
+        clearStorage();
+        router.push("/dashboard");
+      } catch (err) {
+        logError("Failed to save profile", err, { formData });
+        setDialogOpen(true);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData, validateStep, clearStorage, router]
+  );
 
   const stepsCount = 5;
   const progressPercent = (step / stepsCount) * 100;
 
   return (
     <div className="max-w-2xl mx-auto w-full flex flex-col space-y-8 py-4 sm:py-8">
+      {/* Accessible dialog for errors */}
+      <AccessibleDialog
+        isOpen={dialogOpen}
+        type="error"
+        title="Setup Failed"
+        message="Failed to save your profile. Please check your information and try again."
+        primaryLabel="Try Again"
+        onPrimary={() => setDialogOpen(false)}
+      />
+
       {/* Top Banner Indicator with ARIA support */}
       <div className="flex flex-col space-y-3">
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-emerald-400">
           <span>Profile Onboarding</span>
-          <span aria-live="polite" aria-atomic="true">Step {step} of {stepsCount}</span>
+          <span aria-live="polite" aria-atomic="true">
+            Step {step} of {stepsCount}
+          </span>
         </div>
-        <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden" role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Onboarding progress">
+        <div
+          className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuenow={progressPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Onboarding progress"
+        >
           <div
             className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
@@ -194,17 +193,10 @@ export default function OnboardingClient() {
       </div>
 
       {/* Main Glass Form Card */}
-      <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 sm:p-10 border-white/5 flex flex-col space-y-8 text-left">
-        {errors.submit && (
-          <div 
-            role="alert" 
-            aria-live="assertive" 
-            className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm font-medium"
-          >
-            {errors.submit}
-          </div>
-        )}
-
+      <form
+        onSubmit={handleSubmit}
+        className="glass-panel rounded-3xl p-6 sm:p-10 border-white/5 flex flex-col space-y-8 text-left"
+      >
         {step === 1 && (
           <PersonalStep
             name={formData.name}
@@ -214,8 +206,15 @@ export default function OnboardingClient() {
             householdSize={formData.householdSize}
             setHouseholdSize={(householdSize) => updateField({ householdSize })}
             budgetSensitivity={formData.budgetSensitivity}
-            setBudgetSensitivity={(budgetSensitivity) => updateField({ budgetSensitivity })}
-            errors={errors}
+            setBudgetSensitivity={(budgetSensitivity) =>
+              updateField({ budgetSensitivity })
+            }
+            errors={{
+              name: getFieldError("name") ?? "",
+              location: getFieldError("location") ?? "",
+              householdSize: getFieldError("householdSize") ?? "",
+              budgetSensitivity: getFieldError("budgetSensitivity") ?? "",
+            }}
           />
         )}
 
@@ -224,8 +223,13 @@ export default function OnboardingClient() {
             commuteType={formData.commuteType}
             setCommuteType={(commuteType) => updateField({ commuteType })}
             commuteDistanceWeekly={formData.commuteDistanceWeekly}
-            setCommuteDistanceWeekly={(commuteDistanceWeekly) => updateField({ commuteDistanceWeekly })}
-            errors={errors}
+            setCommuteDistanceWeekly={(commuteDistanceWeekly) =>
+              updateField({ commuteDistanceWeekly })
+            }
+            errors={{
+              commuteType: getFieldError("commuteType") ?? "",
+              commuteDistanceWeekly: getFieldError("commuteDistanceWeekly") ?? "",
+            }}
           />
         )}
 
@@ -239,12 +243,22 @@ export default function OnboardingClient() {
         {step === 4 && (
           <EnergyStep
             electricityMonthlyKwh={formData.electricityMonthlyKwh}
-            setElectricityMonthlyKwh={(electricityMonthlyKwh) => updateField({ electricityMonthlyKwh })}
+            setElectricityMonthlyKwh={(electricityMonthlyKwh) =>
+              updateField({ electricityMonthlyKwh })
+            }
             naturalGasMonthlyKwh={formData.naturalGasMonthlyKwh}
-            setNaturalGasMonthlyKwh={(naturalGasMonthlyKwh) => updateField({ naturalGasMonthlyKwh })}
+            setNaturalGasMonthlyKwh={(naturalGasMonthlyKwh) =>
+              updateField({ naturalGasMonthlyKwh })
+            }
             shoppingPattern={formData.shoppingPattern}
-            setShoppingPattern={(shoppingPattern) => updateField({ shoppingPattern })}
-            errors={errors}
+            setShoppingPattern={(shoppingPattern) =>
+              updateField({ shoppingPattern })
+            }
+            errors={{
+              electricityMonthlyKwh: getFieldError("electricityMonthlyKwh") ?? "",
+              naturalGasMonthlyKwh: getFieldError("naturalGasMonthlyKwh") ?? "",
+              shoppingPattern: getFieldError("shoppingPattern") ?? "",
+            }}
           />
         )}
 
@@ -285,12 +299,17 @@ export default function OnboardingClient() {
             <button
               type="submit"
               disabled={loading}
-              aria-label={loading ? "Completing setup" : "Finish setting up your profile"}
+              aria-label={
+                loading ? "Completing setup" : "Finish setting up your profile"
+              }
               className="inline-flex items-center px-6 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-[#090d16] font-display shadow-lg shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" aria-hidden="true" />
+                  <Loader2
+                    className="animate-spin mr-2 h-4 w-4"
+                    aria-hidden="true"
+                  />
                   Calculating...
                 </>
               ) : (

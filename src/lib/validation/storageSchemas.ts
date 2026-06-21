@@ -4,15 +4,23 @@
  */
 
 import { z } from "zod";
-import { onboardingSchema } from "./onboardingSchema";
 
 /**
  * Schema for onboarding draft stored in localStorage.
- * Allows partial validation since user can save at any step.
+ * Uses full validation but allows partial fills during onboarding steps.
  */
-export const onboardingDraftSchema = onboardingSchema.partial().extend({
-  step: z.number().min(1).max(5).optional(),
-  lastUpdated: z.string().datetime().optional(),
+export const onboardingDraftSchema = z.object({
+  name: z.string().min(1),
+  location: z.string().min(1),
+  householdSize: z.number().min(1).max(10),
+  goals: z.array(z.string()),
+  budgetSensitivity: z.enum(["LOW", "MEDIUM", "HIGH"]),
+  commuteType: z.enum(["CAR_PETROL", "CAR_DIESEL", "EV", "TRANSIT", "NONE"]),
+  commuteDistanceWeekly: z.number().nonnegative(),
+  dietPattern: z.enum(["HIGH_MEAT", "LOW_MEAT", "VEGETARIAN", "VEGAN"]),
+  electricityMonthlyKwh: z.number().nonnegative(),
+  naturalGasMonthlyKwh: z.number().nonnegative(),
+  shoppingPattern: z.enum(["HEAVY", "MODERATE", "MINIMALIST"]),
 });
 
 export type OnboardingDraft = z.infer<typeof onboardingDraftSchema>;

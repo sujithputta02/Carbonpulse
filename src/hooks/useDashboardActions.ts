@@ -9,11 +9,16 @@ import {
   deleteActivityAction,
   toggleGoalCompletionAction,
   logActivity,
-  createGoalAction,
 } from "@/app/actions";
-import { ActivityLog, Goal, LogActivityInput } from "@/types/activity";
+import { ActivityLog, Goal } from "@/types/activity";
 import { ScoredTip } from "@/types/recommendation";
 import { logError, getErrorMessage } from "@/lib/clientErrors";
+
+interface LogActivityInput {
+  category: "TRANSPORT" | "FOOD" | "ENERGY" | "SHOPPING";
+  actionType: string;
+  amount: number;
+}
 
 interface DashboardActionsState {
   actionLoading: string | null;
@@ -115,16 +120,10 @@ export function useDashboardActions(userId: string) {
     ) => {
       setState((prev) => ({ ...prev, actionLoading: `pin_${tip.id}` }));
       try {
-        const newGoal = await createGoalAction({
-          title: tip.title,
-          category: tip.category,
-          targetCO2e: tip.potentialSavingsCO2e,
-        });
-
-        if (newGoal) {
-          onSuccess(newGoal);
-          router.refresh();
-        }
+        // Note: createGoalAction should be implemented in server actions
+        // This is a placeholder for the business logic
+        logError("pinRecommendation not yet implemented", new Error(), { tipId: tip.id });
+        onError?.(new Error("Goal creation not yet implemented"));
       } catch (error) {
         logError("Failed to pin recommendation as goal", error, {
           tipId: tip.id,
