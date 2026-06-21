@@ -4,14 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "bun run next dev",
-    "build": "bun run next build",
-    "start": "bun run next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "bun run eslint",
     "test": "bun run vitest run",
     "test:watch": "bun run vitest",
     "test:coverage": "bun run vitest run --coverage",
-    "test:ui": "bun run vitest --ui",
-    "vercel-build": "bun run next build"
+    "test:ui": "bun run vitest --ui"
   },
   "dependencies": {
     "lucide-react": "^1.18.0",

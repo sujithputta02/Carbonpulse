@@ -1,5 +1,5 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "runtime": "bun"
+  "buildCommand": "bun run build"
 }
