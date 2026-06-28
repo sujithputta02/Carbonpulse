@@ -140,7 +140,7 @@
 
   <!-- HUD Stats Selection -->
   <text x="50" y="30" class="hud-label">SUJITH</text>
-  <text x="50" y="45" class="hud-value">000685</text>
+  <text x="50" y="45" class="hud-value">000689</text>
 
   <text x="280" y="30" class="hud-label">COINS</text>
   <text x="280" y="45" class="hud-value">x08</text>
