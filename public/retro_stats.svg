@@ -104,7 +104,7 @@
       <rect x="5" y="8" width="6" height="3" fill="#fce4a0"/>
     </g>
     <text x="45" y="62" class="text-label">COMMITS STOMPED:</text>
-    <text x="235" y="62" class="text-val" id="val-commits">690</text>
+    <text x="235" y="62" class="text-val" id="val-commits">691</text>
 
     <!-- Stat Item: Stars (Gold Coins) -->
     <g transform="translate(20, 92)" class="block-icon-delay1">
@@ -119,7 +119,7 @@
       <rect x="3" y="1" width="10" height="13" fill="#00a800" stroke="#000" stroke-width="1"/>
     </g>
     <text x="45" y="142" class="text-label">LEVELS CLEARED:</text>
-    <text x="235" y="142" class="text-val" id="val-repos">32</text>
+    <text x="235" y="142" class="text-val" id="val-repos">33</text>
 
     <!-- Stat Item: Followers (Toad/NPC icon) -->
     <g transform="translate(20, 172)" class="block-icon-delay3">
