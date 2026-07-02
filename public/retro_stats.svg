@@ -127,7 +127,7 @@
       <circle cx="8" cy="11" r="4" fill="#ffcca0" stroke="#000" stroke-width="1"/>
     </g>
     <text x="45" y="182" class="text-label">NPC ALLIES:</text>
-    <text x="235" y="182" class="text-val" id="val-followers">9</text>
+    <text x="235" y="182" class="text-val" id="val-followers">10</text>
   </g>
 
   <!-- PANEL 2: ADVENTURE SKILLS / POWER-UPS -->
